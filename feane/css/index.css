@@ -1,0 +1,154 @@
+.index-page {
+  background-color: #101010;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  color: #000000;
+  padding-top: 90px;
+  /* tránh nội dung bị che bởi header */
+}
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+
+.modal .form-group {
+  margin-bottom: 0.8rem;
+}
+
+.book-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: #222;
+  position: relative;
+}
+
+.book-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon trái tim yêu thích */
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 10;
+}
+
+.favorite-btn i {
+  color: #bbb;
+  font-size: 18px;
+  transition: color 0.3s ease, transform 0.2s;
+}
+
+.favorite-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.favorite-btn.active i {
+  color: #ff4d4d;
+  transform: scale(1.2);
+}
+
+.img-hover-scale {
+  transition: transform 0.3s;
+}
+
+.img-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.heading_container h2 {
+  color: #ffc107;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.heading_container p {
+  color: #ccc;
+  font-size: 16px;
+}
+
+.btn-warning {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+  background-color: #ffcd38 !important;
+  transform: translateY(-2px);
+}
+
+.card-body {
+  background-color: #111;
+  border-top: 2px solid #ffc107;
+}
+
+.card-body h5 {
+  color: #fff;
+}
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+}
+
+.toast {
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast i {
+  color: #ffc107;
+  font-size: 18px;
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #aaa;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.2);
+  color: #ff4444;
+}
+
+.favorite-btn.liked i {
+  color: #ff4444;
+}
+/* Nút yêu thích*/

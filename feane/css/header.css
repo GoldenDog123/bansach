@@ -1,0 +1,353 @@
+/* Hiển thị menu khi hover */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.user-dropdown-trigger:hover {
+  color: #ffc107;
+}
+
+/* --- MENU --- */
+.user-dropdown-menu {
+  position: absolute;
+  top: 115%;
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(0, 0, 0);
+  min-width: 180px;
+  padding: 6px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.25s ease;
+  visibility: hidden;
+  z-index: 999;
+}
+
+.user-dropdown:hover .user-dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* --- ITEM --- */
+.user-dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 15px;
+  color: #222;
+  border-radius: 8px;
+  margin: 2px 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.user-dropdown-menu .dropdown-item:hover {
+  background-color: #fff6d0;
+  color: #000;
+}
+
+.user-dropdown-menu hr {
+  margin: 6px 0;
+  border-top: 1px solid #eee;
+}
+
+.header_section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  padding: 15px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgb(0, 0, 0);
+}
+
+/* Khi cuộn xuống */
+.header_section.scrolled {
+  background-color: rgba(0, 0, 0, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  padding: 10px 0;
+}
+
+/* ===== Menu ===== */
+.header_section .nav-link {
+  transition: color 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.header_section .nav-link:hover {
+  color: #ffc107 !important;
+}
+
+/* ===== Active ===== */
+.header_section .nav-item.active .nav-link {
+  color: #ffc107 !important;
+  font-weight: 700;
+  position: relative;
+}
+
+.header_section .nav-item.active .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35%;
+  height: 2px;
+  background-color: #ffc107;
+  border-radius: 1px;
+}
+
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  flex: 1;
+  justify-content: center; /* ✨ search ra giữa */
+}
+
+/* Tách khoảng cách tự nhiên */
+.header-left {
+  gap: 16px;
+}
+
+.header-right {
+  gap: 16px;
+}
+
+/* Ngăn xuống dòng và căn chỉnh user góc phải */
+.user_option {
+  flex-shrink: 0;
+}
+
+body {
+  padding-top: 90px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .user_option {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  body {
+    padding-top: 120px;
+  }
+}
+
+/* ===== SEARCH BOX HEADER ===== */
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* 📌 Thêm khoảng cách giữa user_option và search-box */
+.search-box {
+  margin-left: 20px; /* ✅ phần mới thêm */
+}
+
+.search-icon {
+  font-size: 20px;
+  color: #ffa726;
+  cursor: pointer;
+  padding: 6px 8px;
+  transition: 0.25s;
+}
+
+.search-icon:hover {
+  color: #ffcc80;
+}
+
+.search-input {
+  width: 0px;
+  opacity: 0;
+  padding: 6px 10px;
+  margin-left: 5px;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  background: #222;
+  color: #fff;
+  transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+/* Khi active */
+.search-box.active .search-input {
+  width: 600px;
+  opacity: 1;
+  border: 1px solid #ffa726;
+}
+
+.search-box.active .search-icon {
+  color: #ffcc80;
+}
+
+/* Gợi ý */
+.search-suggestions {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 260px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #1b1b1b;
+  border: 1px solid #ffa726;
+  border-radius: 12px;
+  padding: 8px 0;
+  list-style: none;
+  display: none;
+  z-index: 999;
+}
+
+.search-suggestions li {
+  padding: 8px 14px;
+  cursor: pointer;
+  color: #eee;
+  transition: 0.2s;
+}
+
+.search-suggestions li:hover {
+  background: #ffa726;
+  color: #000;
+}
+
+/* Thanh cuộn */
+.search-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-suggestions::-webkit-scrollbar-thumb {
+  background: #ffa726;
+  border-radius: 10px;
+}
+
+.search-suggestions::-webkit-scrollbar-track {
+  background: #333;
+}
+
+/* 📌 Căn giữa mọi thứ để header gọn hơn */
+.user_option,
+.search-box {
+  display: flex;
+  align-items: center; /* ✅ phần mới thêm */
+}
+
+/* 📌 Tăng khoảng cách tổng thể giữa các nhóm */
+.custom_nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@keyframes blinkAnim {
+  0% {
+    transform: scaleY(1);
+  }
+  40% {
+    transform: scaleY(0.1);
+  }
+  60% {
+    transform: scaleY(0.1);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+/* SIDEBAR */
+/* === SIDEBAR YOUTUBE STYLE === */
+.yt-sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 260px;
+  height: 100vh;
+  background: #181818;
+  color: #fff;
+  overflow-y: auto;
+  padding-top: 70px;
+  z-index: 9999;
+  transition: 0.3s ease;
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.yt-sidebar.active {
+  left: 0;
+}
+
+.yt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 9998;
+}
+.yt-overlay.active {
+  display: block;
+}
+
+.yt-section {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.yt-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  font-size: 16px;
+  color: #fff;
+  text-decoration: none;
+  gap: 14px;
+  transition: 0.2s;
+}
+
+.yt-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.yt-sidebar::-webkit-scrollbar {
+  width: 7px;
+}
+.yt-sidebar::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+.sidebar-toggle {
+  font-size: 20px;
+  color: #ffa726;
+  cursor: pointer;
+  padding: 6px 8px;
+  transition: 0.25s;
+}
+
+.sidebar-toggle:hover {
+  color: #ffcc80;
+}

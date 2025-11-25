@@ -1,0 +1,11 @@
+.book_section {
+  padding: 60px 0;
+  background: #fff;
+}
+.form_container .btn-warning {
+  background: #ffbe33;
+  border: 0;
+}
+.card {
+  border-radius: 12px;
+}

@@ -1,0 +1,367 @@
+.menu-page {
+  background-color: #101010;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  color: #fff;
+  padding-top: 90px;
+  /* tránh nội dung bị che bởi header */
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .user_option {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  body {
+    padding-top: 120px;
+  }
+}
+
+.category-scroll {
+  position: relative;
+  overflow-x: auto;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  margin: 20px auto;
+  max-width: 90%;
+  background-color: #101010;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border-radius: 25px;
+}
+
+.category-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.category-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 193, 7, 0.7);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+.category-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: #ffc107;
+}
+.category-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+/* MENU SÁCHHHHHHHHHHHHHHH */
+.filters_menu {
+  display: inline-flex; /* giữ 1 hàng duy nhất */
+  flex-wrap: nowrap; /* không xuống hàng */
+  gap: 10px;
+  padding: 0 10px;
+  margin: 2px auto; /* bỏ margin để không bị lệch */
+  list-style: none;
+  white-space: nowrap; /* không xuống hàng */
+  justify-content: flex-start;
+}
+
+/* Nút mặc định */
+.filters_menu li a {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffa726, #ffca28);
+  color: #222;
+  padding: 8px 36px;
+  border-radius: 50px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 2px solid #fff176;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(255, 160, 0, 0.4);
+}
+
+/* Hover */
+.filters_menu li a:hover {
+  background: linear-gradient(135deg, #ffb300, #ffd740);
+  color: #000;
+  border-color: #ffeb3b;
+  box-shadow: 0 6px 14px rgba(255, 193, 7, 0.6);
+  transform: translateY(-3px);
+}
+
+/* Active */
+.filters_menu li.active a {
+  background: linear-gradient(135deg, #ffb300, #ff9800);
+  color: #000;
+  border: 2px solid #ffeb3b;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.7);
+  transform: translateY(-2px);
+}
+
+/* Khi click xuống */
+.filters_menu li a:active {
+  transform: scale(0.97);
+  box-shadow: inset 0 2px 4px rgba(255, 252, 252, 1);
+}
+
+/* Hiệu ứng mượt mà */
+.filters_menu li a .filters_menu li.active a {
+  background: linear-gradient(135deg, #ffb300, #ff9800);
+  color: #000;
+  border: 2px solid #ffeb3b;
+  font-weight: 600;
+  transform: translateY(-1px);
+}
+
+/* === HỘP SÁCH TRONG SUỐT XUYÊN ẢNH NỀN === */
+.box {
+  position: relative;
+  transition: all 0.4s ease;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* === ẢNH SÁCH === */
+.img-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.4s ease;
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+/* Khi hover, ảnh phóng nhẹ */
+.box:hover .img-box img {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* === DETAIL BOX HIỆN KHI HOVER === */
+.detail-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 14px 10px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35));
+  color: #fff;
+  border-radius: 0 0 15px 15px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.4s ease;
+  z-index: 3;
+}
+
+.box:hover .detail-box {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === THÔNG TIN SÁCH === */
+.detail-box h5 {
+  font-size: clamp(16px, 1.5vw, 18px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail-box p.text-muted {
+  color: #ffca2c !important;
+  font-style: italic;
+  font-size: clamp(13px, 1.2vw, 15px);
+  margin-bottom: 2px;
+}
+
+.detail-box h6 {
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: #ddd;
+  margin-bottom: 10px;
+}
+
+/* === NÚT HÀNH ĐỘNG === */
+.options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.options .btn {
+  flex: 1 1 30%;
+  min-width: 90px;
+  max-width: 120px;
+  height: 38px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.options .btn i {
+  margin-right: 4px;
+}
+
+.options .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* === MÀU TỪNG NÚT === */
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: #fff !important;
+}
+
+.btn-warning:hover {
+  background-color: #ffca2c;
+  color: #000 !important;
+}
+
+.favorite-btn {
+  border: 2px solid #dc3545;
+  color: #dc3545;
+}
+
+.favorite-btn:hover,
+.favorite-btn.liked {
+  background-color: #dc3545;
+  color: #fff !important;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+  .detail-box {
+    padding: 12px 8px;
+  }
+
+  .options .btn {
+    flex: 1 1 45%;
+    height: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .options {
+    flex-direction: column;
+  }
+
+  .options .btn {
+    width: 80%;
+    height: 42px;
+  }
+
+  .detail-box {
+    padding: 10px 6px;
+  }
+
+  .detail-box h5 {
+    font-size: 15px;
+  }
+
+  .detail-box p.text-muted {
+    font-size: 13px;
+  }
+
+  .detail-box h6 {
+    font-size: 12px;
+  }
+}
+
+/* === TOAST THÔNG BÁO === */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+}
+
+.toast {
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast i {
+  color: #ffc107;
+  font-size: 18px;
+}
+
+#borrow-selected {
+  position: fixed;
+  bottom: -80px; /* Ẩn ban đầu */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ffc107, #ffca2c);
+  border: none;
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  padding: 12px 28px;
+  border-radius: 50px;
+  transition: all 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Khi hiện lên */
+#borrow-selected.show {
+  bottom: 30px;
+  opacity: 1;
+  pointer-events: auto;
+  animation: floatUp 0.6s ease;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translate(-50%, 30px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+/* Hiệu ứng hover */
+#borrow-selected:hover {
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 10px 25px rgba(255, 193, 7, 0.4);
+}

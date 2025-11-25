@@ -1,0 +1,86 @@
+.footer_section {
+  background-color: #000;
+  color: #ddd;
+  padding: 50px 0 30px 0;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  flex-shrink: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Tiêu đề cột */
+.footer_title {
+  color: #ffc107;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Danh sách và đoạn text */
+.footer_list li,
+.footer_text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #ccc;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+.footer_list li:hover {
+  color: #ffc107;
+  cursor: pointer;
+}
+
+.footer_text {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* Dòng ngăn cách */
+.footer_line {
+  border-color: rgba(255, 255, 255, 0.1);
+  margin-top: 30px;
+}
+
+/* Bản quyền */
+.footer_copy {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 0;
+}
+
+/* Luôn dính cuối trang nếu nội dung ngắn */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer_text {
+    max-width: 100%;
+  }
+
+  .footer_section {
+    text-align: center;
+  }
+
+  .footer_title {
+    margin-top: 20px;
+  }
+}

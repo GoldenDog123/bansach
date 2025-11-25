@@ -1,0 +1,178 @@
+/* ===== ABOUT PAGE – DARK ORANGE THEME ===== */
+
+/* Nền tổng thể */
+.about-page {
+  background-color: #101010;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  padding-top: 100px;
+  color: #f5f5f5;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== SECTION ABOUT ===== */
+.about-section {
+  background: linear-gradient(180deg, #181818, #121212);
+  padding: 80px 0;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 167, 38, 0.1);
+}
+
+.about-section h2 {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #ffa726;
+}
+
+.about-section p {
+  max-width: 850px;
+  margin: 0 auto;
+  color: #d0d0d0;
+  line-height: 1.6;
+  font-size: 17px;
+}
+
+/* ===== SECTION BG-LIGHT (Team) – DARK + ORANGE STYLE ===== */
+
+.layout_padding.bg-light {
+  background: #181818 !important;     /* đổi nền sáng thành tối sang */
+  padding: 80px 0;
+  color: #f5f5f5;
+  border-top: 1px solid rgba(255,167,38,0.15);
+  border-bottom: 1px solid rgba(255,167,38,0.1);
+}
+
+/* Tiêu đề trung tâm */
+.layout_padding.bg-light .heading_container h2 {
+  font-size: 34px;
+  font-weight: 800;
+  color: #ffa726;
+}
+
+.layout_padding.bg-light .heading_container p {
+  color: #d0d0d0 !important;
+  font-size: 16px;
+}
+
+/* ===== TEAM CARD ===== */
+
+.layout_padding.bg-light .team-card {
+  background: #1f1f1f !important;
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid rgba(255,167,38,0.15);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+  transition: all 0.35s ease;
+}
+
+.layout_padding.bg-light .team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(255,167,38,0.35);
+  border-color: rgba(255,167,38,0.35);
+}
+
+/* Ảnh */
+.layout_padding.bg-light .team-card img {
+  height: 230px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  transition: transform 0.35s ease;
+}
+
+.layout_padding.bg-light .team-card:hover img {
+  transform: scale(1.06);
+}
+
+/* Tên */
+.layout_padding.bg-light .team-card h5 {
+  font-size: 20px;
+  color: #ffa726;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+/* Chức vụ */
+.layout_padding.bg-light .team-card p.text-muted {
+  color: #ffcc80 !important;
+  margin-bottom: 3px;
+}
+
+/* Email */
+.layout_padding.bg-light .team-card small {
+  color: #e0e0e0;
+  opacity: 0.9;
+}
+
+
+/* ===== STATS BOX ===== */
+.stats-box {
+  background: #171717;
+  padding: 40px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 167, 38, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.stats-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(255, 167, 38, 0.35);
+}
+
+.stats-box h3 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffa726;
+  margin-bottom: 8px;
+}
+
+.stats-box p {
+  color: #e0e0e0;
+  font-size: 15px;
+}
+
+/* ===== CALL TO ACTION ===== */
+.cta-section {
+  background: linear-gradient(135deg, #ffa726, #ff8f00);
+  padding: 80px 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cta-section h2 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.cta-section p {
+  font-size: 18px;
+  color: #fff;
+  opacity: 0.9;
+  margin-bottom: 25px;
+}
+
+.cta-section a {
+  background: #fff;
+  color: #181818;
+  padding: 12px 32px;
+  border-radius: 35px;
+  font-weight: 700;
+  font-size: 18px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.cta-section a:hover {
+  background: #101010;
+  color: #ffa726;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(-3px);
+}

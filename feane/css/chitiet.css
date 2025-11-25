@@ -1,0 +1,361 @@
+/* ===== NỀN TOÀN TRANG ===== */
+.book_section {
+  background-color: #101010;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  color: #fff;
+  padding-top: 90px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .user_option {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  body {
+    padding-top: 120px;
+  }
+}
+
+/* ===== KHỐI CHI TIẾT SÁCH ===== */
+.book-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(255, 193, 7, 0.25);
+}
+
+/* ===== ẢNH SÁCH ===== */
+.book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 0 0 20px;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.book-image:hover {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+/* ===== THÔNG TIN SÁCH ===== */
+.book-info {
+  padding: 40px;
+}
+
+.book-title {
+  font-weight: 700;
+  font-size: 28px;
+  color: #ffc107;
+  margin-bottom: 15px;
+}
+
+.book-meta p {
+  margin-bottom: 6px;
+  color: #ddd;
+  font-size: 16px;
+}
+
+.book-price {
+  font-size: 22px;
+  color: #ff4444;
+  font-weight: 700;
+  margin: 25px 0 20px;
+}
+
+.book-info p {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+/* ===== NÚT HÀNH ĐỘNG ===== */
+.btn-main {
+  background: linear-gradient(135deg, #ffbe33, #ff8f00);
+  border: none;
+  color: #000;
+  font-weight: 700;
+  padding: 10px 28px;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-main:hover {
+  background: linear-gradient(135deg, #ffca2c, #ffb300);
+  transform: translateY(-2px);
+}
+
+.btn-back {
+  border: 2px solid #ffc107;
+  background: transparent;
+  color: #ffc107;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 10px 28px;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: #ffc107;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* ===== HEADER DÀNH CHO TRANG CHI TIẾT ===== */
+.header_detail {
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 999;
+}
+
+.header_detail.scrolled {
+  background: rgba(0, 0, 0, 1);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .book-image {
+    border-radius: 20px 20px 0 0;
+  }
+
+  .book-info {
+    padding: 25px;
+  }
+
+  .book-title {
+    font-size: 22px;
+  }
+}
+
+/* ===== WRAPPER CHO SÁCH GỢI Ý ===== */
+.recommended_books_wrapper {
+  position: relative;
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+
+  /* bắt buộc ẩn phần tràn */
+  overflow: hidden;
+
+  /* khoảng cho nút mũi tên (giữ nguyên vị trí nút) */
+  padding: 0 60px;
+}
+
+/* ===== NÚT MŨI TÊN ===== */
+.arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arrow-btn:hover {
+  background: rgba(26, 22, 22, 0.9);
+}
+.left-arrow {
+  left: 10px;
+} /* đặt sát trong padding */
+.right-arrow {
+  right: 10px;
+}
+
+/* ===== ROW SCROLL ===== */
+.recommended_books_row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+
+  /* bỏ padding ở đây (đã chuyển vào wrapper) */
+  padding: 10px 0;
+  margin: 0 auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* BẮT BUỘC: width vừa đủ cho 4 card */
+  width: 1180px;
+  box-sizing: content-box;
+}
+
+/* scrollbar */
+.recommended_books_row::-webkit-scrollbar {
+  height: 6px;
+}
+.recommended_books_row::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 193, 7, 0.7);
+  border-radius: 10px;
+}
+
+/* ===== CARD SÁCH ===== */
+.recommended_books_row .box {
+  flex: 0 0 280px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  position: relative;
+  flex-shrink: 0 !important;
+  min-width: 280px !important;
+}
+
+/* ===== ẢNH SÁCH ===== */
+.recommended_books .img-box {
+  width: 100%;
+  aspect-ratio: 3/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.recommended_books .img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.recommended_books .box:hover .img-box img {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* ===== DETAIL BOX ===== */
+.recommended_books .detail-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35));
+  color: #fff;
+  border-radius: 0 0 20px 20px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 0.4s ease;
+  z-index: 3;
+}
+
+.recommended_books .box:hover .detail-box {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.recommended_books .detail-box h5 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recommended_books .detail-box p.text-muted {
+  color: #ffca2c;
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.recommended_books .detail-box h6 {
+  font-size: 13px;
+  color: #ddd;
+  margin-bottom: 10px;
+}
+
+/* ===== NÚT HÀNH ĐỘNG ===== */
+.recommended_books .options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.recommended_books .options .btn {
+  flex: 1 1 45%;
+  min-width: 90px;
+  max-width: 130px;
+  height: 38px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.recommended_books .options .btn:hover {
+  transform: translateY(-2px);
+}
+
+.recommended_books .btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: #fff !important;
+}
+
+.recommended_books .btn-warning:hover {
+  background-color: #ffca2c;
+  color: #000 !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+  .recommended_books_row {
+    padding: 10px 20px;
+  }
+
+  .recommended_books .options {
+    flex-direction: column;
+  }
+
+  .recommended_books .options .btn {
+    width: 80%;
+    height: 42px;
+  }
+}
+@media (max-width: 1280px) {
+  .recommended_books_row {
+    /* loại bỏ cố định để responsive: hiển thị đầy đủ trong viewport nhỏ */
+    width: calc(100% - 120px); /* -120 vì wrapper padding 60px hai bên */
+  }
+}
+
+@media (max-width: 992px) {
+  /* Nhiều màn hình nhỏ hơn sẽ hiển thị 2-3 card tùy kích thước thật */
+  .recommended_books_row {
+    width: calc(100% - 120px);
+  }
+}
