@@ -9,7 +9,7 @@ require_once('ketnoi.php');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thư Viện Trường Học</title>
+  <title>Cửa Hàng Sách</title>
 
   <!-- Bootstrap & Boxicons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -268,8 +268,8 @@ require_once('ketnoi.php');
       <i id="toggleSidebar" class='bx bx-menu'></i>
       <img src="assets/images/logothuvien.png" alt="logo">
       <div>
-        <div class="title">Thư viện CTECH</div>
-        <div style="font-size:12px;">Quản lý & Mượn trả</div>
+        <div class="title">Cửa Hàng Sách</div>
+        <div style="font-size:12px;">cửa hàng tự động 24/7</div>
       </div>
     </div>
     <div class="actions">
@@ -308,9 +308,9 @@ require_once('ketnoi.php');
           <i class='bx bx-book'></i><span>Sách</span>
         </a></li>
 
-    <li><a href="index.php?page_layout=danhsachdonhang" class="nav-link">
-  <i class='bx bx-cart'></i><span>Quản lý đơn hàng</span>
-</a></li>
+      <li><a href="index.php?page_layout=danhsachdonhang" class="nav-link">
+          <i class='bx bx-cart'></i><span>Quản lý đơn hàng</span>
+        </a></li>
 
       <li><a href="index.php?page_layout=danhsachtacgia" class="nav-link">
           <i class='bx bx-user-voice'></i><span>Tác giả</span>
@@ -423,6 +423,16 @@ require_once('ketnoi.php');
             case "xoa_donhang":
               require_once 'xoa_donhang.php';
               break;
+
+            case 'duyet_donhang':
+              include 'duyet_donhang.php';
+              break;
+
+            case "capnhap_thanhtoan":
+              require_once 'capnhap_thanhtoan.php';
+              break;
+
+       
 
             // --- YÊU THÍCH ---
             case "danhsachyeuthich":
