@@ -1,17 +1,22 @@
 <?php
 require_once('ketnoi.php');
-session_start();
 
-if (isset($_GET['id'])) {
-  $id = intval($_GET['id']);
-  $sql = "DELETE FROM nguoidung WHERE idnguoidung=$id";
-
-  if (mysqli_query($ketnoi, $sql)) {
-    $_SESSION['toast'] = ['type' => 'success', 'msg' => '🗑️ Xóa người dùng thành công!'];
-  } else {
-    $_SESSION['toast'] = ['type' => 'error', 'msg' => '❌ Không thể xóa người dùng này!'];
-  }
+$idnguoidung = $_GET['id'] ?? 0;
+if (!is_numeric($idnguoidung) || $idnguoidung <= 0) {
+    header('Location: index.php?page_layout=danhsachnguoidung');
+    exit();
 }
 
-header("Location: index.php?page_layout=danhsachnguoidung");
+// Lệnh xóa người dùng. ON DELETE CASCADE sẽ tự động xóa các địa chỉ và dữ liệu liên quan.
+$sql_delete = "DELETE FROM nguoidung WHERE idnguoidung = $idnguoidung";
+
+if (mysqli_query($ketnoi, $sql_delete)) {
+    echo "<script>showToast('Xóa người dùng thành công! Dữ liệu liên quan đã được xóa.', 'success');</script>";
+} else {
+    echo "<script>showToast('Lỗi khi xóa người dùng: " . mysqli_error($ketnoi) . "', 'danger');</script>";
+}
+
+// Chuyển hướng về trang danh sách
+header('Location: index.php?page_layout=danhsachnguoidung');
 exit();
+?>

@@ -1,49 +1,62 @@
 <?php
 require_once('ketnoi.php');
-if (!isset($_GET['idloaisach'])) {
-  echo "<script>alert('❌ Không tìm thấy thể loại!'); window.location='index.php?page_layout=danhsachloaisach';</script>";
-  exit;
-}
-$id = $_GET['idloaisach'];
-$query = mysqli_query($ketnoi, "SELECT * FROM loaisach WHERE idloaisach='$id'");
-$row = mysqli_fetch_assoc($query);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $tenloaisach = trim($_POST['tenloaisach']);
-  if ($tenloaisach === '') {
-    echo "<script>alert('⚠️ Vui lòng nhập tên thể loại!');</script>";
-  } else {
-    $sql = "UPDATE loaisach SET tenloaisach='$tenloaisach' WHERE idloaisach='$id'";
-    if (mysqli_query($ketnoi, $sql)) {
-      echo "<script>alert('✅ Cập nhật thành công!'); window.location='index.php?page_layout=danhsachloaisach';</script>";
+$idloaisach = $_GET['id'] ?? 0;
+if (!is_numeric($idloaisach) || $idloaisach <= 0) {
+    header('Location: index.php?page_layout=danhsachdanhmuc');
+    exit();
+}
+
+// Lấy thông tin danh mục hiện tại
+$sql_hien_tai = "SELECT tenloaisach FROM loaisach WHERE idloaisach = $idloaisach";
+$query_hien_tai = mysqli_query($ketnoi, $sql_hien_tai);
+$loaisach_hien_tai = mysqli_fetch_assoc($query_hien_tai);
+
+if (!$loaisach_hien_tai) {
+    echo "<script>showToast('Không tìm thấy Danh mục!', 'danger');</script>";
+    header('Location: index.php?page_layout=danhsachdanhmuc');
+    exit();
+}
+$ten_hien_tai = $loaisach_hien_tai['tenloaisach'];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tenloaisach_moi = mysqli_real_escape_string($ketnoi, $_POST['tenloaisach'] ?? '');
+
+    if (empty($tenloaisach_moi)) {
+        echo "<script>showToast('Tên danh mục không được để trống!', 'warning');</script>";
     } else {
-      echo "<script>alert('❌ Lỗi khi cập nhật!');</script>";
+        // Cập nhật
+        $sql_update = "UPDATE loaisach SET tenloaisach = '$tenloaisach_moi' WHERE idloaisach = $idloaisach";
+        
+        if (mysqli_query($ketnoi, $sql_update)) {
+            echo "<script>showToast('Cập nhật danh mục thành công!', 'success');</script>";
+            header('Location: index.php?page_layout=danhsachdanhmuc');
+            exit();
+        } else {
+            echo "<script>showToast('Lỗi khi cập nhật danh mục: " . mysqli_error($ketnoi) . "', 'danger');</script>";
+        }
     }
-  }
 }
 ?>
 
-<div class="container mt-4">
-  <div class="card shadow border-0">
-    <div class="card-header bg-warning text-dark">
-      <h5 class="mb-0"><i class="bx bx-edit-alt"></i> Sửa thể loại</h5>
-    </div>
-    <div class="card-body">
-      <form method="POST">
-        <div class="mb-3">
-          <label class="form-label fw-bold">Tên thể loại</label>
-          <input type="text" name="tenloaisach" value="<?= htmlspecialchars($row['tenloaisach']); ?>" class="form-control" required>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <h2 class="mb-4 text-info"><i class='bx bx-edit'></i> Sửa Danh mục: <?= htmlspecialchars($ten_hien_tai); ?></h2>
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-4">
+                        <label for="tenloaisach" class="form-label fw-bold">Tên Danh mục <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="tenloaisach" name="tenloaisach" required 
+                                value="<?= htmlspecialchars($ten_hien_tai); ?>">
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="index.php?page_layout=danhsachdanhmuc" class="btn btn-secondary"><i class='bx bx-arrow-back'></i> Quay lại</a>
+                        <button type="submit" class="btn btn-info text-white"><i class='bx bx-save'></i> Lưu Thay Đổi</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="d-flex justify-content-between">
-          <a href="index.php?page_layout=danhsachloaisach" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Quay lại
-          </a>
-          <button type="submit" class="btn btn-primary">
-            <i class="bx bx-save"></i> Lưu thay đổi
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
