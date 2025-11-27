@@ -140,12 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- bootstrap core css -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-    <!-- owl slider stylesheet -->
-    <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <!-- nice select -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" />
     <!-- font awesome -->
     <link href="css/font-awesome.min.css" rel="stylesheet" />
     <!-- custom styles -->
@@ -305,11 +299,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                 <!-- Nút yêu thích -->
                                 <button
-                                    class="favorite-btn <?php echo isset($_SESSION['idnguoidung']) && mysqli_num_rows(mysqli_query($ketnoi, "SELECT * FROM yeuthich WHERE idnguoidung = {$_SESSION['idnguoidung']} AND idsach = {$r['idsach']}")) > 0 ? 'liked' : ''; ?>"
+                                    class="favorite-btn <?php echo in_array($r['idsach'], $_SESSION['favorites'] ?? []) ? 'liked' : ''; ?>"
                                     data-id="<?php echo $r['idsach']; ?>">
                                     <i class="fa fa-heart"></i>
                                 </button>
-
 
                                 <div class="overflow-hidden">
                                     <img src="<?php echo htmlspecialchars($img); ?>" class="card-img-top img-hover-scale"
@@ -329,6 +322,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             class="btn btn-sm btn-primary rounded-pill px-3">
                                             Chi tiết
                                         </a>
+                                        <button class="btn btn-sm btn-success rounded-pill px-3 add-to-cart"
+                                            data-id="<?php echo $idsach; ?>"
+                                            data-name="<?php echo htmlspecialchars($r['tensach']); ?>"
+                                            data-price="<?php echo $r['dongia']; ?>"
+                                            data-img="<?php echo $r['hinhanhsach']; ?>">
+                                            <i class="fa fa-cart-plus me-1"></i> Giỏ
+                                        </button>
                                         <a href="book.php?idsach=<?php echo $idsach; ?>"
                                             class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3">
                                             Mua
@@ -438,6 +438,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 },
             });
         });
+
+        $(document).on("click", ".add-to-cart", function() {
+            let idsach = $(this).data("id");
+            let tensach = $(this).data("name");
+            let dongia = $(this).data("price");
+            let hinhanhsach = $(this).data("img");
+
+            // Lấy giỏ hàng từ localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Kiểm tra sách có tồn tại trong giỏ không
+            let item = cart.find(i => i.idsach === idsach);
+            if (item) {
+                item.soluong += 1;
+            } else {
+                cart.push({
+                    idsach: idsach,
+                    tensach: tensach,
+                    dongia: dongia,
+                    hinhanhsach: hinhanhsach,
+                    soluong: 1
+                });
+            }
+
+            // Lưu vào localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Dispatch event để header.php cập nhật
+            window.dispatchEvent(new Event('cartUpdated'));
+
+            showToast("🛒 Đã thêm vào giỏ hàng");
+        });
     </script>
     <!-- JS -->
 
@@ -465,10 +497,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
     <!-- Footer -->
     <?php include 'footer.php'; ?>
-    <script src="js/jquery-3.4.1.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
     <script src="js/bootstrap.js"></script>
-    <script src="js/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/custom.js"></script>
 </body>
 
 </html>

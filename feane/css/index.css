@@ -152,3 +152,258 @@
   color: #ff4444;
 }
 /* Nút yêu thích*/
+
+/* ==================== ENHANCED BOOK CARD STYLING ==================== */
+
+/* Màu gradient nền cho card */
+.book-card {
+  background: #000000;
+  border: 1px solid rgba(255, 193, 7, 0.1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hover effect nâng cao */
+.book-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(255, 193, 7, 0.2), 0 0 30px rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.3);
+}
+
+/* Glow effect khi hover */
+.book-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 193, 7, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.book-card:hover::before {
+  opacity: 1;
+}
+
+/* Ảnh sách với overlay */
+.book-card .overflow-hidden {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(255, 193, 7, 0.1));
+}
+
+.book-card .card-img-top {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.320, 1), filter 0.5s ease;
+  filter: brightness(0.95);
+}
+
+.book-card:hover .card-img-top {
+  transform: scale(1.08) rotate(1deg);
+  filter: brightness(1.1) saturate(1.2);
+}
+
+/* Card body nâng cao */
+.book-card .card-body {
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.8) 0%, rgba(26, 26, 46, 0.9) 100%);
+  padding: 20px;
+  border-top: 2px solid rgba(255, 193, 7, 0.2);
+}
+
+.book-card .card-body h5 {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+.book-card:hover .card-body h5 {
+  color: #ffc107;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+
+.book-card .card-body p {
+  color: #aaa;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.book-card .card-body p.text-secondary {
+  color: #888 !important;
+}
+
+/* Buttons container */
+.book-card .card-body .d-flex {
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Button styling nâng cao */
+.book-card .btn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+}
+
+/* Button hover effects */
+.book-card .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.book-card .btn:hover::before {
+  left: 100%;
+}
+
+.book-card .btn span,
+.book-card .btn i {
+  position: relative;
+  z-index: 1;
+}
+
+/* Primary button */
+.book-card .btn-primary {
+  background: linear-gradient(135deg, #3b7aec 0%, #2d5db8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(59, 122, 236, 0.3);
+}
+
+.book-card .btn-primary:hover {
+  background: linear-gradient(135deg, #4d8fff 0%, #3b7aec 100%);
+  box-shadow: 0 6px 20px rgba(59, 122, 236, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Success button (Add to cart) */
+.book-card .btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.book-card .btn-success:hover {
+  background: linear-gradient(135deg, #34c759 0%, #28a745 100%);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Warning button (Buy) */
+.book-card .btn-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+  font-weight: 700;
+}
+
+.book-card .btn-warning:hover {
+  background: linear-gradient(135deg, #ffcd38 0%, #ffc107 100%) !important;
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Favorite button positioning */
+.book-card .favorite-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.3s ease;
+}
+
+.book-card .favorite-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 193, 7, 0.6);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+  transform: scale(1.1);
+}
+
+.book-card .favorite-btn i {
+  color: #bbb;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.book-card .favorite-btn:hover i {
+  color: #ffc107;
+  text-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
+}
+
+.book-card .favorite-btn.liked i {
+  color: #ff4d4d;
+  text-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+  animation: heartbeat 0.5s ease;
+}
+
+/* Heartbeat animation */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .book-card {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .book-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(255, 193, 7, 0.15);
+  }
+
+  .book-card .btn {
+    font-size: 11px;
+    padding: 5px 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-card .card-body {
+    padding: 15px;
+  }
+
+  .book-card .btn {
+    font-size: 10px;
+    padding: 4px 10px !important;
+  }
+
+  .book-card .favorite-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .book-card .favorite-btn i {
+    font-size: 18px;
+  }
+}

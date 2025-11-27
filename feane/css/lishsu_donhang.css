@@ -1,0 +1,161 @@
+/* ===========================
+   Nền & bố cục chung
+=========================== */
+body {
+  background-color: #101010;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  color: #ddd;
+  padding-top: 90px;
+}
+
+/* ===========================
+   Card đơn hàng
+=========================== */
+.card {
+  background-color: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.05);
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(255, 193, 7, 0.15);
+}
+
+.card-body {
+  background-color: #111;
+  border-top: 2px solid #ffc107;
+  border-radius: 12px;
+}
+
+.card-body h5,
+.card-body small {
+  color: #fff;
+}
+
+/* ===========================
+   Badge trạng thái
+=========================== */
+.badge-status-cho_duyet {
+  background: #ffc107 !important;
+  color: #000 !important;
+}
+
+.badge-status-dang_giao {
+  background: #17a2b8 !important;
+  color: #fff !important;
+}
+
+.badge-status-hoan_thanh {
+  background: #28a745 !important;
+  color: #fff !important;
+}
+
+.badge-status-da_huy {
+  background: #dc3545 !important;
+  color: #fff !important;
+}
+
+/* ===========================
+   Timeline
+=========================== */
+.timeline {
+  position: relative;
+  padding: 1rem 0;
+  list-style: none;
+}
+
+.timeline:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  left: 20px;
+  background: #333;
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin: 0 0 1.5rem 40px;
+  padding-left: 1rem;
+  color: #ccc;
+}
+
+.timeline-item .time {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+/* ===========================
+   Bảng chi tiết đơn hàng
+=========================== */
+.table {
+  color: #ccc;
+  background-color: #111;
+}
+
+.table thead th {
+  background-color: #222;
+  color: #ffc107;
+  border-color: #333;
+}
+
+.table tbody tr:hover {
+  background-color: #1a1a1a;
+}
+
+.table td,
+.table th {
+  border-color: #333;
+}
+
+/* ===========================
+   Form tìm đơn (admin)
+=========================== */
+input.form-control {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+input.form-control:focus {
+  background-color: #222;
+  border-color: #ffc107;
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.4);
+}
+
+.btn-primary {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #ffcd38 !important;
+  transform: translateY(-2px);
+}
+
+/* ===========================
+   hr style
+=========================== */
+hr {
+  border-top: 1px solid #333;
+}
+
+/* ===========================
+   Alert
+=========================== */
+.alert-info {
+  background-color: #222;
+  color: #ffd86b;
+  border: 1px solid #444;
+}

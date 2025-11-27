@@ -1,0 +1,283 @@
+/* ===============================
+   HÓA ĐƠN – TONE ĐEN + VÀNG (FORM)
+   =============================== */
+
+:root{
+  --bg-dark: #0f0f10;
+  --panel: #131313;
+  --panel-2: #1a1a1a;
+  --text: #e9e7e1;
+  --muted: #bdb6aa;
+  --gold: #ffc107;
+  --gold-soft: rgba(255,193,7,0.12);
+  --accent-border: rgba(255,193,7,0.18);
+  --glass: rgba(255,255,255,0.02);
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text);
+  padding: 30px;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container */
+.invoice-box {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%), var(--panel);
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 28px;
+  max-width: 980px;
+  margin: 18px auto;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+/* Header */
+.invoice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.invoice-header .left {
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+.invoice-header h2 {
+  color: var(--gold);
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.2px;
+  font-size: 1.5rem;
+}
+.invoice-header p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Logo */
+.logo {
+  width: 86px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,193,7,0.06), rgba(255,193,7,0.02));
+  padding: 6px;
+  filter: drop-shadow(0 6px 22px rgba(255,193,7,0.07));
+}
+
+/* Form layout */
+.invoice-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Left: items table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--panel-2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.table thead th {
+  background-color: var(--gold);
+  color: #000;
+  font-weight: 700;
+  border: none;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.table tbody td {
+  padding: 12px;
+  vertical-align: middle;
+  border-top: 1px solid rgba(255,255,255,0.03);
+  color: var(--text);
+  font-size: 0.95rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+}
+
+.table img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), 0 0 14px rgba(255,193,7,0.04) inset;
+}
+
+/* Right: checkout form panel */
+.invoice-side {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent), var(--panel);
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Form fields */
+.invoice-form .field {
+  margin-bottom: 12px;
+}
+.invoice-form label {
+  display:block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+.invoice-form input[type="text"],
+.invoice-form input[type="email"],
+.invoice-form input[type="tel"],
+.invoice-form textarea,
+.invoice-form select {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--accent-border);
+  padding: 10px 12px;
+  border-radius: 8px;
+  outline: none;
+  transition: box-shadow .12s ease, border-color .12s ease, transform .08s ease;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+}
+.invoice-form textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+.invoice-form input::placeholder,
+.invoice-form textarea::placeholder {
+  color: rgba(255,255,255,0.28);
+}
+.invoice-form input:focus,
+.invoice-form textarea:focus,
+.invoice-form select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 6px 22px rgba(255,193,7,0.08);
+  transform: translateY(-1px);
+}
+
+/* Small badge/notes */
+.note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* Summary / totals in the side panel */
+.summary {
+  background: linear-gradient(180deg, rgba(255,193,7,0.02), transparent), var(--panel-2);
+  border: 1px solid rgba(255,193,7,0.06);
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.summary .row {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.summary .row.total {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 1.06rem;
+}
+.summary .grand-total {
+  font-size: 1.3rem;
+  color: var(--gold);
+  font-weight: 900;
+}
+
+/* Actions */
+.invoice-actions {
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  align-items:center;
+}
+.btn {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 10px 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  cursor:pointer;
+  border: 1px solid transparent;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-print {
+  background: var(--gold);
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(255,193,7,0.08);
+}
+.btn-print:hover {
+  background: #ffd24d;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.btn-secondary:hover {
+  color: var(--text);
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+}
+
+/* Error / success messages */
+.alert {
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.alert-info {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.alert-danger {
+  background: linear-gradient(180deg, rgba(255,0,0,0.03), transparent);
+  color: #ffdede;
+  border: 1px solid rgba(255,0,0,0.08);
+}
+
+/* Small helpers */
+.text-muted { color: var(--muted); font-size: 0.92rem; }
+.text-danger { color: var(--gold) !important; font-weight: 800; font-size: 1.18rem; }
+
+/* Responsive */
+@media (max-width: 880px) {
+  .invoice-grid {
+    grid-template-columns: 1fr;
+  }
+  .invoice-header { flex-direction: column; align-items: flex-start; gap:8px; }
+  .invoice-box { padding: 18px; }
+}
+
+/* Print mode: invert to white background and hide non-print elements */
+@media print {
+  body, .invoice-box { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+  .table thead th { background: #efefef !important; color: #000 !important; }
+  .btn, .invoice-actions { display: none !important; }
+  .invoice-form input,
+  .invoice-form textarea { border-color: #ddd !important; box-shadow: none !important; background: #fff !important; color: #000 !important; }
+}
+  
+/* Accessibility focus */
+:focus { outline: none; box-shadow: 0 0 0 3px var(--gold-soft); }

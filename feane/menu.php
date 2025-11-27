@@ -166,9 +166,6 @@ $books = mysqli_query($ketnoi, $sql);
         ?>
           <div class="col-sm-6 col-lg-4 mb-4">
             <div class="box">
-              <!-- Checkbox chọn nhiều -->
-              <input type="checkbox" class="select-book" value="<?= $r['idsach']; ?>"
-                style="position:absolute; top:10px; left:10px; z-index:10; transform:scale(1.5); cursor:pointer;">
               <div class="img-box position-relative">
                 <img src="<?= htmlspecialchars($img); ?>" alt="<?= htmlspecialchars($r['tensach']); ?>">
               </div>
@@ -181,9 +178,13 @@ $books = mysqli_query($ketnoi, $sql);
                   <a href="chitietsach.php?idsach=<?= $r['idsach']; ?>" class="btn btn-outline-primary rounded-pill px-3">
                     <i class="fa fa-info-circle me-1"></i> Chi tiết
                   </a>
-                  <a href="book.php?idsach=<?= $r['idsach']; ?>" class="btn btn-warning rounded-pill px-3">
-                    <i class="fa fa-book me-1"></i> Mua
-                  </a>
+                  <button class="btn btn-success rounded-pill px-3 add-to-cart"
+                    data-id="<?= $r['idsach']; ?>"
+                    data-name="<?= htmlspecialchars($r['tensach']); ?>"
+                    data-price="<?= $r['dongia']; ?>"
+                    data-img="<?= $r['hinhanhsach']; ?>">
+                    <i class="fa fa-cart-plus me-1"></i> Thêm vào giỏ
+                  </button>
                   <a href="javascript:void(0);"
                     class="btn btn-outline-danger rounded-pill px-3 favorite-btn <?= in_array($r['idsach'], $_SESSION['favorites'] ?? []) ? 'liked' : ''; ?>"
                     data-id="<?= $r['idsach']; ?>">
@@ -195,53 +196,17 @@ $books = mysqli_query($ketnoi, $sql);
           </div>
         <?php } ?>
       </div>
-      <div class="text-center mb-4">
-        <button id="borrow-selected" class="btn btn-warning fw-bold px-4 py-2 rounded-pill">
-          <i class="fa fa-book me-2"></i> Mua sách đã chọn
-        </button>
-      </div>
     </div>
   </section>
 
 
   <!-- SCRIPT -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      const selectedBooks = new Set();
-
-      // Khi tick chọn hoặc bỏ chọn sách
-      $(document).on("change", ".select-book", function() {
-        const id = $(this).val();
-
-        if (this.checked) selectedBooks.add(id);
-        else selectedBooks.delete(id);
-
-        // Hiện hoặc ẩn nút mượn
-        if (selectedBooks.size > 0) {
-          $("#borrow-selected").addClass("show");
-        } else {
-          $("#borrow-selected").removeClass("show");
-        }
-      });
-
-      // Khi nhấn nút "Mượn sách đã chọn"
-      $("#borrow-selected").on("click", function() {
-        if (selectedBooks.size === 0) return;
-
-        const ids = Array.from(selectedBooks).join(",");
-        window.location.href = "book.php?ids=" + encodeURIComponent(ids);
-      });
-    });
-  </script>
-
-
   <!-- Footer -->
   <?php include 'footer.php'; ?>
 
-  <!-- Thông báo nhỏ nút yêu thích -->
+  <!-- Toast Container -->
   <div id="toast-container"></div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     function showToast(message) {
       const toast = $(`
@@ -286,6 +251,39 @@ $books = mysqli_query($ketnoi, $sql);
       });
     });
   </script>
+  <script>
+    $(document).on("click", ".add-to-cart", function() {
+      let idsach = $(this).data("id");
+      let tensach = $(this).data("name");
+      let dongia = $(this).data("price");
+      let hinhanhsach = $(this).data("img");
+
+      // Lấy giỏ hàng từ localStorage
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      // Kiểm tra sách có tồn tại trong giỏ không
+      let item = cart.find(i => i.idsach === idsach);
+      if (item) {
+        item.soluong += 1;
+      } else {
+        cart.push({
+          idsach: idsach,
+          tensach: tensach,
+          dongia: dongia,
+          hinhanhsach: hinhanhsach,
+          soluong: 1
+        });
+      }
+
+      // Lưu vào localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      // Dispatch event để header.php cập nhật
+      window.dispatchEvent(new Event('cartUpdated'));
+
+      showToast("🛒 Đã thêm vào giỏ hàng");
+    });
+  </script>
 
   <!-- JS -->
   <script>
@@ -318,7 +316,6 @@ $books = mysqli_query($ketnoi, $sql);
     }
   </script>
 
-
   <script>
     const toggleBtn = document.getElementById("userToggle");
     const dropdown = document.getElementById("userDropdown");
@@ -342,10 +339,11 @@ $books = mysqli_query($ketnoi, $sql);
     }
   </script>
 
-
+  <!-- Bootstrap & Custom JS -->
   <script src="js/bootstrap.js"></script>
   <script src="js/custom.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Isotope Layout (cho filter sách) -->
   <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 
 

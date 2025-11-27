@@ -1,0 +1,246 @@
+/* ===== REVIEWS AND COMMENTS STYLING ===== */
+
+.reviews_section {
+  background: #0a0a0a;
+}
+
+/* Rating Card */
+.rating-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid rgba(255, 193, 7, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+.rating-card:hover {
+  border-color: rgba(255, 193, 7, 0.3) !important;
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.1);
+}
+
+/* Average Rating Display */
+.avg-rating-display {
+  background: rgba(255, 193, 7, 0.05);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.avg-rating-display h2 {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 36px;
+}
+
+.avg-rating-display .stars {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Star Rating Input */
+.star-rating-input {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-direction: row-reverse;
+}
+
+.star-label {
+  transition: all 0.2s ease;
+  color: #555;
+  cursor: pointer;
+}
+
+.star-label:hover,
+.star-label:hover ~ .star-label {
+  color: #ffc107;
+  text-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
+  transform: scale(1.1);
+}
+
+/* Ratings Distribution */
+.rating-bar {
+  transition: all 0.3s ease;
+}
+
+.rating-bar:hover {
+  opacity: 0.8;
+}
+
+/* Comments Card */
+.comments-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid rgba(255, 193, 7, 0.15) !important;
+  transition: all 0.3s ease;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.comments-card:hover {
+  border-color: rgba(255, 193, 7, 0.3) !important;
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.1);
+}
+
+/* Comment Form */
+#commentForm {
+  background: rgba(255, 193, 7, 0.03);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+#commentForm .form-control {
+  background: #0a0a0a !important;
+  border-color: #333 !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+#commentForm .form-control:focus {
+  background: #1a1a1a !important;
+  border-color: #ffc107 !important;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.2) !important;
+}
+
+#commentForm .form-control::placeholder {
+  color: #666;
+}
+
+/* Comment Item */
+.comment-item {
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.comment-header {
+  margin-bottom: 12px;
+}
+
+.comment-header strong {
+  font-size: 14px;
+  color: #ffc107;
+}
+
+.comment-header small {
+  font-size: 12px;
+  color: #777;
+}
+
+.comment-item p {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+/* Empty Comments Message */
+.comment-item .text-muted {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.comment-item .text-muted i {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+/* Button Styling */
+#ratingForm .btn,
+#commentForm .btn {
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+#ratingForm .btn-warning,
+#commentForm .btn-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+  color: #000;
+}
+
+#ratingForm .btn-warning:hover,
+#commentForm .btn-warning:hover {
+  background: linear-gradient(135deg, #ffcd38 0%, #ffc107 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+}
+
+/* Scrollbar Styling for Comments */
+.comments-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-card::-webkit-scrollbar-track {
+  background: rgba(255, 193, 7, 0.05);
+  border-radius: 10px;
+}
+
+.comments-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 193, 7, 0.2);
+  border-radius: 10px;
+}
+
+.comments-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 193, 7, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rating-card,
+  .comments-card {
+    margin-bottom: 30px;
+  }
+
+  .avg-rating-display h2 {
+    font-size: 28px;
+  }
+
+  .comments-card {
+    max-height: 600px;
+  }
+
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .comment-header small {
+    margin-left: 0 !important;
+    margin-top: 5px;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .star-rating-input {
+    gap: 5px;
+  }
+
+  .star-label {
+    font-size: 20px;
+  }
+
+  .avg-rating-display h2 {
+    font-size: 24px;
+  }
+
+  .rating-bar small {
+    font-size: 10px;
+  }
+
+  #commentForm .form-control {
+    font-size: 14px;
+  }
+}

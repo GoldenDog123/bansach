@@ -43,55 +43,17 @@ $orders = mysqli_fetch_all($orders_q, MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lịch sử đơn hàng</title>
     <link rel="stylesheet" href="css/bootstrap.css">
-    <style>
-        .timeline {
-            position: relative;
-            padding: 1rem 0;
-            list-style: none;
-        }
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/header.css">
+    <link href="css/footer.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/lichsu_donhang.css">
 
-        .timeline:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            left: 20px;
-            background: #e9ecef;
-            border-radius: 2px;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin: 0 0 1.5rem 40px;
-            padding-left: 1rem;
-        }
-
-        .timeline-item .time {
-            font-size: .85rem;
-            color: #6c757d;
-        }
-
-        .badge-status-cho_duyet {
-            background: #ffc107;
-            color: #000;
-        }
-
-        .badge-status-dang_giao {
-            background: #17a2b8;
-            color: #fff;
-        }
-
-        .badge-status-hoan_thanh {
-            background: #28a745;
-            color: #fff;
-        }
-
-        .badge-status-da_huy {
-            background: #dc3545;
-            color: #fff;
-        }
-    </style>
 </head>
 
 <body>

@@ -31,7 +31,6 @@ if (!empty($ids)) {
 }
 
 // ====== XỬ LÝ GỬI FORM ======
-// ====== XỬ LÝ GỬI FORM ======
 $message_form = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $hoten = trim($_POST['hoten']);
@@ -98,6 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       if ($inserted > 0) {
         $message_form = '<div class="alert alert-success">✅ Đặt hàng thành công! Mã đơn: ' . $iddonhang . '</div>';
+        // Lưu ID đơn hàng để hiển thị hóa đơn
+        $_SESSION['last_order_id'] = $iddonhang;
       } else {
         $message_form = '<div class="alert alert-danger">❌ Không thể tạo đơn hàng.</div>';
       }
@@ -159,10 +160,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
 
           <!-- Danh sách sách đã chọn -->
-          <?php if (!empty($selected_books)): ?>
-            <div class="form-group mb-3">
-              <label>📚 Danh sách sách bạn sẽ mua:</label>
-              <ul class="book-list list-unstyled bg-dark text-white p-3 rounded">
+          <div class="form-group mb-3">
+            <label>📚 Danh sách sách bạn sẽ mua:</label>
+            <ul class="book-list list-unstyled bg-dark text-white p-3 rounded">
+              <?php if (!empty($selected_books)): ?>
                 <?php foreach ($selected_books as $b): ?>
                   <li class="py-2 border-bottom border-secondary">
                     <i class="fa fa-book me-2 text-warning"></i>
@@ -177,11 +178,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       value="1" min="1" required>
                   </li>
                 <?php endforeach; ?>
-              </ul>
-            </div>
-          <?php else: ?>
-            <div class="alert alert-warning text-center">⚠️ Bạn chưa chọn sách nào để mua!</div>
-          <?php endif; ?>
+              <?php else: ?>
+                <li class="text-center py-3 text-muted">
+                  <i class="fa fa-inbox me-2"></i> Giỏ hàng trống
+                </li>
+              <?php endif; ?>
+            </ul>
+          </div>
 
           <!-- Nút xác nhận -->
           <div class="text-center mt-4">
@@ -199,11 +202,297 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </section>
 
+  <!-- ===== MODAL HÓA ĐƠN ===== -->
+  <div id="invoiceModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content bg-dark text-white" style="border: 1px solid #ffc107;">
+        <div class="modal-header border-warning">
+          <h5 class="modal-title text-warning" id="invoiceModalLabel">
+            <i class="fa fa-receipt"></i> HÓA ĐƠN THANH TOÁN
+          </h5>
+          <button type="button" class="btn-close btn-close-white" onclick="closeInvoiceModal()" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" id="invoiceContent">
+          <!-- Nội dung hóa đơn sẽ được thêm bằng JavaScript -->
+        </div>
+
+        <div class="modal-footer border-warning">
+          <button type="button" class="btn btn-warning" onclick="printInvoice()">
+            <i class="fa fa-print"></i> In hóa đơn
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <?php include 'footer.php'; ?>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
-</body>
+  <script>
+    // Load cart from localStorage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      const form = document.querySelector('form');
+      if (!form) return;
+
+      if (cart.length > 0) {
+        // Clear existing book fields
+        document.querySelectorAll('input[name^="book_ids"]').forEach(el => el.remove());
+        document.querySelectorAll('input[name^="soluong"]').forEach(el => el.remove());
+
+        // Add cart items to form
+        cart.forEach(item => {
+          const bookIdInput = document.createElement('input');
+          bookIdInput.type = 'hidden';
+          bookIdInput.name = 'book_ids[]';
+          bookIdInput.value = item.idsach;
+          form.appendChild(bookIdInput);
+
+          const qtyInput = document.createElement('input');
+          qtyInput.type = 'hidden';
+          qtyInput.name = `soluong[${item.idsach}]`;
+          qtyInput.value = item.soluong;
+          form.appendChild(qtyInput);
+        });
+
+        // Update selected books display
+        const bookList = document.querySelector('.book-list');
+        if (bookList) {
+          let html = '';
+          let total = 0;
+          
+          cart.forEach(item => {
+            const itemTotal = item.dongia * item.soluong;
+            total += itemTotal;
+            
+            html += `
+              <li class="py-2 border-bottom border-secondary">
+                <i class="fa fa-book me-2 text-warning"></i>
+                <b>${item.tensach}</b>
+                <small class="text-muted">${item.soluong} × ${item.dongia.toLocaleString()}₫ = ${itemTotal.toLocaleString()}₫</small>
+              </li>
+            `;
+          });
+          
+          html += `
+            <li class="py-3 fw-bold text-warning">
+              <i class="fa fa-calculator me-2"></i> Tổng cộng: ${total.toLocaleString()}₫
+            </li>
+          `;
+          
+          bookList.innerHTML = html;
+        }
+      }
+
+      // ===== XỬ LÝ FORM THANH TOÁN =====
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        
+        try {
+          const response = await fetch('book.php', {
+            method: 'POST',
+            body: formData
+          });
+
+          const html = await response.text();
+          console.log('Form submitted, waiting for response...');
+          
+          // Tìm mã đơn hàng từ response (tìm "Mã đơn: XXXXX")
+          const match = html.match(/Mã đơn:\s*(\d+)/);
+          
+          if (match && match[1]) {
+            const iddonhang = match[1];
+            console.log('Order ID found:', iddonhang);
+            
+            // Chờ 300ms rồi hiển thị hóa đơn
+            setTimeout(async () => {
+              await showInvoice(iddonhang);
+              
+              // Clear localStorage cart
+              localStorage.setItem('cart', JSON.stringify([]));
+              window.dispatchEvent(new Event('cartUpdated'));
+            }, 300);
+          } else {
+            console.log('No order ID found in response');
+            alert('Lỗi: Không thể tạo đơn hàng');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Lỗi: ' + error.message);
+        }
+      });
+    });
+
+    // ===== HIỂN THỊ INVOICE MODAL =====
+    async function showInvoice(iddonhang) {
+      try {
+        const response = await fetch('xuly_hoadon.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `iddonhang=${iddonhang}`
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          const invoice = result.invoice;
+          const html = generateInvoiceHTML(invoice);
+          
+          document.getElementById('invoiceContent').innerHTML = html;
+          
+          // Hiển thị modal
+          const modal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+          modal.show();
+        } else {
+          alert('Lỗi: ' + result.message);
+        }
+      } catch (error) {
+        alert('Lỗi: ' + error.message);
+      }
+    }
+
+    // ===== TẠO HTML HÓA ĐƠN =====
+    function generateInvoiceHTML(invoice) {
+      const branchInfo = invoice.branch_info;
+      let itemsHTML = '';
+      
+      invoice.items.forEach(item => {
+        const subtotal = item.dongia * item.soluong;
+        itemsHTML += `
+          <tr>
+            <td>${item.tensach}</td>
+            <td class="text-center">${item.soluong}</td>
+            <td class="text-end">${Number(item.dongia).toLocaleString()}₫</td>
+            <td class="text-end">${subtotal.toLocaleString()}₫</td>
+          </tr>
+        `;
+      });
+
+      const html = `
+        <div style="padding: 30px; background: #0a0a0a; border-radius: 10px;">
+          <!-- Header -->
+          <div class="text-center mb-4">
+            <h4 class="text-warning mb-2"><i class="fa fa-store"></i> BAN SÁCH</h4>
+            <p class="text-muted mb-1">${branchInfo.name}</p>
+            <p class="text-muted mb-1">📍 ${branchInfo.address}</p>
+            <p class="text-muted mb-1">📞 ${branchInfo.phone} | 📧 ${branchInfo.email}</p>
+          </div>
+
+          <hr style="border-color: #ffc107;">
+
+          <!-- Thông tin hóa đơn -->
+          <div class="row mb-3">
+            <div class="col-6">
+              <p><strong>Mã hóa đơn:</strong> <span class="text-warning">#${invoice.iddonhang}</span></p>
+              <p><strong>👤 Người mua:</strong> ${invoice.hoten}</p>
+              <p><strong>📧 Email:</strong> ${invoice.email}</p>
+            </div>
+            <div class="col-6 text-end">
+              <p><strong>📅 Ngày mua:</strong> ${invoice.ngaydat_formatted}</p>
+              <p><strong>⏰ Thời gian:</strong> ${invoice.thoigian_formatted}</p>
+            </div>
+          </div>
+
+          <hr style="border-color: #ffc107;">
+
+          <!-- Bảng chi tiết -->
+          <table class="table table-dark table-borderless" style="margin-bottom: 20px;">
+            <thead style="border-bottom: 2px solid #ffc107;">
+              <tr>
+                <th>Tên sách</th>
+                <th class="text-center">Số lượng</th>
+                <th class="text-end">Giá</th>
+                <th class="text-end">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHTML}
+            </tbody>
+          </table>
+
+          <!-- Tính toán tổng -->
+          <div class="row mb-3" style="font-size: 14px;">
+            <div class="col-6"></div>
+            <div class="col-6">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tổng sản phẩm:</span>
+                <strong>${invoice.total_items}</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <strong>${Number(invoice.subtotal).toLocaleString()}₫</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>VAT (10%):</span>
+                <strong>${Number(invoice.vat).toLocaleString()}₫</strong>
+              </div>
+              <div class="d-flex justify-content-between" style="border-top: 2px solid #ffc107; padding-top: 10px;">
+                <span class="text-warning"><strong>TOTAL:</strong></span>
+                <strong class="text-warning" style="font-size: 18px;">${Number(invoice.total).toLocaleString()}₫</strong>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border-color: #ffc107;">
+
+          <!-- QR Code -->
+          <div class="text-center mt-4">
+            <p class="text-muted mb-2"><small>Quét QR để xác nhận thanh toán</small></p>
+            <img src="${invoice.qr_code_url}" alt="QR Code" style="width: 200px; height: 200px; border: 2px solid #ffc107; padding: 10px; background: #fff; border-radius: 10px;">
+          </div>
+
+          <div class="text-center mt-4 text-muted">
+            <p><small>Cảm ơn bạn đã mua hàng tại BAN SÁCH</small></p>
+            <p><small>Vui lòng giữ lại hóa đơn này để kiểm tra.</small></p>
+          </div>
+        </div>
+      `;
+
+      return html;
+    }
+
+    // ===== ĐÓNG MODAL HÓA ĐƠN =====
+    function closeInvoiceModal() {
+      const modal = bootstrap.Modal.getInstance(document.getElementById('invoiceModal'));
+      if (modal) {
+        modal.hide();
+      }
+    }
+
+    // ===== IN HÓA ĐƠN =====
+    function printInvoice() {
+      const content = document.getElementById('invoiceContent').innerHTML;
+      const printWindow = window.open('', '', 'height=800,width=800');
+      
+      let printHTML = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>In hóa đơn</title>';
+      printHTML += '<link rel="stylesheet" href="css/bootstrap.css">';
+      printHTML += '<style>';
+      printHTML += 'body { background: #1a1a1a; color: #fff; font-family: Arial, sans-serif; }';
+      printHTML += '@media print {';
+      printHTML += 'body { background: #fff; color: #000; }';
+      printHTML += '.text-warning { color: #ffc107 !important; }';
+      printHTML += '.text-muted { color: #999; }';
+      printHTML += 'hr { border-color: #ddd; }';
+      printHTML += 'table { background: #fff; }';
+      printHTML += '.table-dark { background: #f5f5f5 !important; color: #000; }';
+      printHTML += '.btn-close-white { display: none; }';
+      printHTML += '}';
+      printHTML += '</style>';
+      printHTML += '</head><body>';
+      printHTML += content;
+      printHTML += '<script>window.print(); window.close();<' + '/script>';
+      printHTML += '</body></html>';
+      
+      printWindow.document.write(printHTML);
+      printWindow.document.close();
+    }
+  </script></body>
 
 </html>
