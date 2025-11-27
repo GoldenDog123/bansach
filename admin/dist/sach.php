@@ -1,138 +1,172 @@
 <?php
+// Đảm bảo biến $ketnoi được khởi tạo
 require_once('ketnoi.php');
 
-$sql = "SELECT s.*, l.tenloaisach, t.tentacgia
-        FROM sach s
-        LEFT JOIN loaisach l ON s.idloaisach = l.idloaisach
-        LEFT JOIN tacgia t ON s.idtacgia = t.idtacgia
-        ORDER BY s.ngaynhap DESC";
-$result = mysqli_query($ketnoi, $sql);
+// Truy vấn lấy dữ liệu Sách, kết hợp Tên Thể loại và Tên Tác giả
+$sql = "
+    SELECT 
+        s.idsach, 
+        s.tensach, 
+        s.dongia,  
+        s.soluong, 
+        s.hinhanhsach, 
+        tg.tentacgia, 
+        ls.tenloaisach
+    FROM sach s
+    LEFT JOIN tacgia tg ON s.idtacgia = tg.idtacgia
+    LEFT JOIN loaisach ls ON s.idloaisach = ls.idloaisach
+    ORDER BY s.idsach DESC
+";
+
+$query = mysqli_query($ketnoi, $sql); 
+
+if (!$query) {
+    die("Lỗi truy vấn: " . mysqli_error($ketnoi));
+}
 ?>
 
-<!-- ========== DANH SÁCH SÁCH ========== -->
-<div class="container mt-4">
-  <div class="card shadow border-0" style="border-radius: 16px;">
-    <div class="card-header text-white d-flex justify-content-between align-items-center"
-         style="background: linear-gradient(90deg, #06b6d4, #67e8f9); color: #fff;">
-      <h4 class="mb-0 fw-bold"><i class="bx bx-book"></i> Quản lý Sách</h4>
-      <a href="index.php?page_layout=them_sach" class="btn btn-light btn-sm fw-semibold shadow-sm rounded-pill px-3">
-        <i class="bx bx-plus-circle"></i> Thêm Sách
-      </a>
-    </div>
+<div class="container-fluid mt-4">
+    <div class="card shadow border-0" style="border-radius: 16px;">
+        <div class="card-header text-white d-flex justify-content-between align-items-center"
+             style="background: linear-gradient(90deg, #0ea5e9, #38bdf8); color: #fff;">
+            <h4 class="mb-0 fw-bold"><i class='bx bx-book'></i> Quản lý Sách</h4>
+            <a href="index.php?page_layout=them_sach" class="btn btn-light btn-sm fw-bold shadow-sm rounded-pill px-3">
+                <i class='bx bx-plus-circle'></i> Thêm Sách Mới
+            </a>
+        </div>
 
-    <div class="card-body bg-light">
-      <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle shadow-sm bg-white">
-          <thead class="text-center align-middle" style="background-color: #e0f7fa;">
-            <tr>
-              <th>STT</th>
-              <th>Ảnh bìa</th>
-              <th>Tên sách</th>
-              <th>Tác giả</th>
-              <th>Thể loại</th>
-              <th>Số lượng</th>
-              <th>Đơn giá</th>
-              <th>Ngày nhập</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody class="text-center">
-            <?php 
-            $i = 1;
-            while ($row = mysqli_fetch_assoc($result)) { ?>
-              <tr>
-                <td><strong><?= $i++; ?></strong></td>
-                <td>
-                  <?php if (!empty($row['hinhanhsach'])): ?>
-                    <img src="../../feane/images/<?= htmlspecialchars($row['hinhanhsach']); ?>" 
-                         width="60" height="80"
-                         class="shadow-sm rounded border"
-                         style="object-fit:cover;">
-                  <?php else: ?>
-                    <span class="text-muted fst-italic">Chưa có ảnh</span>
-                  <?php endif; ?>
-                </td>
-                <td class="fw-semibold text-start"><?= htmlspecialchars($row['tensach']); ?></td>
-                <td><?= htmlspecialchars($row['tentacgia'] ?? 'Không rõ'); ?></td>
-                <td><span class="badge bg-info-subtle text-dark px-3 py-2 shadow-sm"><?= htmlspecialchars($row['tenloaisach'] ?? 'Không rõ'); ?></span></td>
-                <td><?= $row['soluong']; ?></td>
-                <td class="text-success fw-bold"><?= number_format($row['dongia']); ?>₫</td>
-                <td><?= date('d/m/Y', strtotime($row['ngaynhap'])); ?></td>
-                <td>
-                  <div class="d-flex justify-content-center gap-2">
-                    <a href="index.php?page_layout=sua_sach&idsach=<?= $row['idsach']; ?>" 
-                       class="btn btn-warning btn-sm shadow-sm text-dark rounded-pill px-2"
-                       data-bs-toggle="tooltip" title="Chỉnh sửa">
-                      <i class="bx bx-edit-alt"></i>
-                    </a>
-                    <button class="btn btn-danger btn-sm shadow-sm rounded-pill px-2"
-                            data-id="<?= $row['idsach']; ?>"
-                            data-bs-toggle="tooltip" title="Xóa sách"
-                            onclick="confirmDelete(this)">
-                      <i class="bx bx-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
+        <div class="card-body bg-light">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle shadow-sm bg-white">
+                    <thead class="text-center align-middle" style="background-color: #e0f2fe;">
+                        <tr>
+                            <th style="width: 80px;">ID</th>
+                            <th style="width: 100px;">Ảnh</th>
+                            <th class="text-start">Tên Sách</th>
+                            <th style="width: 150px;">Tác giả</th>
+                            <th style="width: 150px;">Thể loại</th>
+                            <th style="width: 120px;">Giá bán</th>
+                            <th style="width: 100px;">Tồn kho</th>
+                            <th style="width: 150px;">Hành động</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="text-center">
+                        <?php 
+                        if (mysqli_num_rows($query) > 0) {
+                            while ($row = mysqli_fetch_assoc($query)) { 
+                                $stock_class = ($row['soluong'] <= 5) ? 'text-danger fw-bold' : 'text-primary';
+                        ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row['idsach']); ?></td>
+                                    <td>
+                                        <?php if (!empty($row['hinhanhsach'])): ?>
+                                            <img src="../../feane/images/<?= htmlspecialchars($row['hinhanhsach']); ?>" 
+                                                 alt="<?= htmlspecialchars($row['tensach']); ?>" 
+                                                 style="width: 70px; height: 90px; object-fit: cover; border-radius: 4px;">
+                                        <?php else: ?>
+                                            <span class="text-muted fst-italic">Không có ảnh</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-start fw-semibold"><?= htmlspecialchars($row['tensach']); ?></td>
+                                    <td><?= htmlspecialchars($row['tentacgia'] ?? 'N/A'); ?></td>
+                                    <td>
+                                        <span class="badge bg-info-subtle text-dark px-3 py-1 shadow-sm">
+                                            <?= htmlspecialchars($row['tenloaisach'] ?? 'N/A'); ?>
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold text-primary">
+                                        <?= number_format($row['dongia'], 0, ',', '.') ?>₫ 
+                                    </td>
+                                    <td class="<?= $stock_class; ?>">
+                                        <?= htmlspecialchars($row['soluong']); ?>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="index.php?page_layout=sua_sach&id=<?= $row['idsach'] ?>" 
+                                               class="btn btn-warning btn-sm shadow-sm text-dark rounded-pill px-2"
+                                               title="Sửa sách">
+                                                <i class='bx bx-edit'></i> 
+                                            </a>
+                                            
+                                            <button class="btn btn-danger btn-sm shadow-sm rounded-pill px-2"
+                                                    data-id="<?= $row['idsach']; ?>"
+                                                    title="Xóa sách"
+                                                    onclick="confirmDelete(this)">
+                                                <i class='bx bx-trash'></i> 
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                        <?php }
+                        } else { ?>
+                            <tr>
+                                <td colspan="8" class="text-center text-muted fst-italic py-3">
+                                    Không có sách nào trong hệ thống.
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- Toast -->
 <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
 
-<!-- JS xử lý Tooltip + Toast + Xóa -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+    // Khởi tạo Tooltip Bootstrap (nếu bạn sử dụng Bootstrap 5)
+    if (typeof bootstrap !== 'undefined' && typeof bootstrap.Tooltip !== 'undefined') {
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+    }
 });
 
-function confirmDelete(btn) {
-  if (confirm("⚠️ Bạn có chắc muốn xóa sách này không?")) {
-    const id = btn.dataset.id;
-    fetch(`xoa_sach.php?idsach=${id}`)
-      .then(res => res.text())
-      .then(msg => {
-        const ok = msg.includes('✅');
-        showToast(ok ? '✅ Xóa thành công!' : '❌ Không thể xóa!', ok ? 'success' : 'danger');
-        setTimeout(() => window.location.reload(), 1500);
-      });
-  }
+function showToast(message, type = 'info') {
+    const color = {
+        success: 'bg-success',
+        danger: 'bg-danger',
+        info: 'bg-info'
+    }[type] || 'bg-primary';
+    
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white border-0 ${color} show`;
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body fw-semibold">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>`;
+    document.getElementById('toastContainer').appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
 }
 
-function showToast(message, type = 'info') {
-  const color = {
-    success: 'bg-success',
-    danger: 'bg-danger',
-    info: 'bg-info'
-  }[type] || 'bg-primary';
-  
-  const toast = document.createElement('div');
-  toast.className = `toast align-items-center text-white border-0 ${color} show`;
-  toast.innerHTML = `
-    <div class="d-flex">
-      <div class="toast-body fw-semibold">${message}</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-    </div>`;
-  document.getElementById('toastContainer').appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+function confirmDelete(btn) {
+    // Sử dụng confirm mặc định để xác nhận
+    if (confirm("⚠️ Bạn có chắc muốn xóa sách này vĩnh viễn không?")) {
+        const id = btn.dataset.id;
+        
+        // Gửi yêu cầu xóa qua Fetch API (Đã thống nhất dùng index.php)
+        fetch(`index.php?page_layout=xoa_sach&id=${id}`) 
+            .then(res => res.text())
+            .then(msg => {
+                // Kiểm tra chuỗi trả về từ PHP ("✅ Xóa thành công")
+                const ok = msg.includes('✅'); 
+                showToast(ok ? '✅ Xóa thành công!' : msg, ok ? 'success' : 'danger');
+                
+                // Tải lại trang sau khi xóa thành công hoặc thất bại
+                setTimeout(() => window.location.reload(), 1500);
+            })
+            .catch(error => {
+                showToast('❌ Lỗi kết nối server!', 'danger');
+            });
+    }
 }
 </script>
 
-<!-- CSS -->
 <style>
-  .table-hover tbody tr:hover {
-    background-color: #f0fdfa !important;
-    transition: all 0.25s ease;
-  }
-  .card-header {
-    border-bottom: none;
-  }
-  .btn-sm i {
-    font-size: 1rem;
-  }
+    .table-hover tbody tr:hover {
+        background-color: #f0fdfa !important;
+        transition: all 0.25s ease;
+    }
 </style>

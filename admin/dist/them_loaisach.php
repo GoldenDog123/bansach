@@ -1,46 +1,51 @@
 <?php
 require_once('ketnoi.php');
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $tenloaisach = trim($_POST['tenloaisach']);
-  if ($tenloaisach === '') {
-    echo "<script>alert('⚠️ Tên thể loại không được để trống!');</script>";
-  } else {
-    $check = mysqli_query($ketnoi, "SELECT * FROM loaisach WHERE tenloaisach='$tenloaisach'");
-    if (mysqli_num_rows($check) > 0) {
-      echo "<script>alert('⚠️ Thể loại này đã tồn tại!');</script>";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tenloaisach = mysqli_real_escape_string($ketnoi, $_POST['tenloaisach'] ?? '');
+
+    if (empty($tenloaisach)) {
+        echo "<script>showToast('Tên danh mục không được để trống!', 'warning');</script>";
     } else {
-      $sql = "INSERT INTO loaisach (tenloaisach, created_at) VALUES ('$tenloaisach', NOW())";
-      if (mysqli_query($ketnoi, $sql)) {
-        echo "<script>alert('✅ Thêm thể loại thành công!'); window.location='index.php?page_layout=danhsachloaisach';</script>";
-      } else {
-        echo "<script>alert('❌ Thêm thất bại!');</script>";
-      }
+        // Kiểm tra trùng tên (Tùy chọn)
+        $sql_check = "SELECT * FROM loaisach WHERE tenloaisach = '$tenloaisach'";
+        $query_check = mysqli_query($ketnoi, $sql_check);
+        
+        if (mysqli_num_rows($query_check) > 0) {
+            echo "<script>showToast('Danh mục này đã tồn tại!', 'danger');</script>";
+        } else {
+            $sql_insert = "INSERT INTO loaisach (tenloaisach) VALUES ('$tenloaisach')";
+            
+            if (mysqli_query($ketnoi, $sql_insert)) {
+                echo "<script>showToast('Thêm danh mục thành công!', 'success');</script>";
+                header('Location: index.php?page_layout=danhsachdanhmuc');
+                exit();
+            } else {
+                echo "<script>showToast('Lỗi khi thêm danh mục: " . mysqli_error($ketnoi) . "', 'danger');</script>";
+            }
+        }
     }
-  }
 }
 ?>
 
-<div class="container mt-4">
-  <div class="card shadow border-0">
-    <div class="card-header bg-success text-white">
-      <h5 class="mb-0"><i class="bx bx-plus-circle"></i> Thêm thể loại mới</h5>
-    </div>
-    <div class="card-body">
-      <form method="POST">
-        <div class="mb-3">
-          <label class="form-label fw-bold">Tên thể loại</label>
-          <input type="text" name="tenloaisach" class="form-control" required>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <h2 class="mb-4 text-warning"><i class='bx bx-plus-circle'></i> Thêm Danh mục Sách Mới</h2>
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-4">
+                        <label for="tenloaisach" class="form-label fw-bold">Tên Danh mục <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="tenloaisach" name="tenloaisach" required 
+                                placeholder="Ví dụ: Tiểu thuyết, Khoa học, Kinh tế,...">
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="index.php?page_layout=danhsachdanhmuc" class="btn btn-secondary"><i class='bx bx-arrow-back'></i> Quay lại</a>
+                        <button type="submit" class="btn btn-warning text-white"><i class='bx bx-save'></i> Thêm Danh mục</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="d-flex justify-content-between">
-          <a href="index.php?page_layout=danhsachloaisach" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Quay lại
-          </a>
-          <button type="submit" class="btn btn-primary">
-            <i class="bx bx-save"></i> Lưu
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
