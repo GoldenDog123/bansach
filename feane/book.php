@@ -97,8 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       if ($inserted > 0) {
         $message_form = '<div class="alert alert-success">✅ Đặt hàng thành công! Mã đơn: ' . $iddonhang . '</div>';
-        // Lưu ID đơn hàng để hiển thị hóa đơn
-        $_SESSION['last_order_id'] = $iddonhang;
       } else {
         $message_form = '<div class="alert alert-danger">❌ Không thể tạo đơn hàng.</div>';
       }
@@ -220,6 +218,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="modal-footer border-warning">
           <button type="button" class="btn btn-warning" onclick="printInvoice()">
             <i class="fa fa-print"></i> In hóa đơn
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="closeAndGoHome()">
+            <i class="fa fa-times"></i> Đóng
           </button>
         </div>
       </div>
@@ -464,6 +465,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (modal) {
         modal.hide();
       }
+    }
+
+    // ===== ĐÓNG MODAL VÀ CHUYỂN HƯỚNG VỀ TRANG CHỦ =====
+    function closeAndGoHome() {
+      $('#invoiceModal').modal('hide');
+      setTimeout(function() {
+        window.location.href = 'index.php';
+      }, 300);
     }
 
     // ===== IN HÓA ĐƠN =====

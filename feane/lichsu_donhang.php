@@ -85,11 +85,11 @@ $orders = mysqli_fetch_all($orders_q, MYSQLI_ASSOC);
                                 <h5 class="mb-1">Đơn hàng #<?php echo $order['iddonhang']; ?></h5>
                                 <small class="text-muted">Ngày đặt: <?php echo $order['ngaydat']; ?></small>
                             </div>
+
                             <div class="text-right">
                                 <span class="badge <?php echo 'badge-status-' . $order['trangthai']; ?> py-2 px-3">
                                     <?php echo str_replace('_', ' ', $order['trangthai']); ?>
                                 </span>
-                                <div class="text-muted">Tổng: <?php echo number_format($order['tongtien']); ?> đ</div>
                             </div>
                         </div>
 
@@ -141,8 +141,6 @@ $orders = mysqli_fetch_all($orders_q, MYSQLI_ASSOC);
                                         <th>#</th>
                                         <th>Tên sách</th>
                                         <th>Số lượng</th>
-                                        <th>Đơn giá</th>
-                                        <th>Thành tiền</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -151,12 +149,31 @@ $orders = mysqli_fetch_all($orders_q, MYSQLI_ASSOC);
                                             <td><?php echo $row['idsach']; ?></td>
                                             <td><?php echo htmlspecialchars($row['tensach']); ?></td>
                                             <td><?php echo $row['soluong']; ?></td>
-                                            <td><?php echo number_format($row['dongia']); ?></td>
-                                            <td><?php echo number_format($row['thanhtien']); ?></td>
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- VAT and Total Summary -->
+                        <div class="mt-3 text-right">
+                            <div class="row justify-content-end">
+                                <div class="col-md-4">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Tạm tính:</span>
+                                        <span><?php echo number_format($order['tongtien'] / 1.1); ?> đ</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>VAT (10%):</strong></span>
+                                        <span><strong><?php echo number_format($order['tongtien'] - ($order['tongtien'] / 1.1)); ?> đ</strong></span>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between" style="font-size: 1.1rem;">
+                                        <span><strong>Tổng cộng:</strong></span>
+                                        <span><strong style="color: #28a745;"><?php echo number_format($order['tongtien']); ?> đ</strong></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
