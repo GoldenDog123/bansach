@@ -80,9 +80,9 @@ echo json_encode([
     'qr_code_url' => $qr_code_url,
     'branch_info' => [
       'name' => 'BAN SÁCH - Chi nhánh Trung tâm',
-      'address' => '123 Đường Ngô Quyền, Quận 5, TP.HCM',
-      'phone' => '(028) 3821-5000',
-      'email' => 'contact@bansach.vn'
+      'address' => '60 QL1A, xã Thường Tín, TP. Hà Nội',
+      'phone' => '1800 6770',
+      'email' => 'contact@ctech.edu.vn'
     ]
   ]
 ]);

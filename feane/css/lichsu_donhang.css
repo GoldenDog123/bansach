@@ -1,0 +1,139 @@
+/* Lịch sử đơn hàng styling */
+
+.card {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.badge-status-cho_xu_ly {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-status-dang_xu_ly {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.badge-status-da_giao {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-status-da_huy {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge-status-hoan_tien {
+    background-color: #6f42c1;
+    color: #fff;
+}
+
+/* Timeline styling */
+.timeline {
+    list-style: none;
+    padding: 0;
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e0e0e0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #007bff;
+}
+
+.timeline-item .time {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+/* Order details table */
+.table {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+.table thead th {
+    border-top: none;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.text-right {
+    text-align: right;
+}
+
+hr {
+    margin: 1.5rem 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+h6 {
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+    }
+
+    .text-right {
+        margin-top: 1rem;
+        text-align: left;
+    }
+
+    .table {
+        font-size: 0.85rem;
+    }
+}
