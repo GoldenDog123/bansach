@@ -10,10 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vaitro = mysqli_real_escape_string($ketnoi, $_POST['vaitro'] ?? 'hoc_sinh');
 
     // 2. Lấy dữ liệu địa chỉ đầu tiên
-    $diachi_chitiet = mysqli_real_escape_string($ketnoi, $_POST['diachi_chitiet'] ?? '');
-    $tinh_thanhpho = mysqli_real_escape_string($ketnoi, $_POST['tinh_thanhpho'] ?? '');
-    $hoten_nguoinhan = mysqli_real_escape_string($ketnoi, $_POST['hoten_nguoinhan'] ?? $hoten);
-    $sdt_nguoinhan = mysqli_real_escape_string($ketnoi, $_POST['sdt_nguoinhan'] ?? $sdt);
+    $diachi = mysqli_real_escape_string($ketnoi, $_POST['diachi'] ?? '');
+    $hoten_dc = mysqli_real_escape_string($ketnoi, $_POST['hoten_dc'] ?? $hoten);
+    $sdt_dc = mysqli_real_escape_string($ketnoi, $_POST['sdt_dc'] ?? $sdt);
     
     if (empty($hoten) || empty($email) || empty($matkhau)) {
         echo "<script>showToast('Vui lòng nhập đầy đủ Họ tên, Email và Mật khẩu!', 'warning');</script>";
@@ -38,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 $idnguoidung = mysqli_insert_id($ketnoi);
                 
-                // B. Insert địa chỉ đầu tiên (nếu có đủ thông tin)
-                if (!empty($diachi_chitiet) && !empty($tinh_thanhpho)) {
-                    $sql_insert_dc = "INSERT INTO diachi (idnguoidung, hoten_nguoinhan, sdt_nguoinhan, diachi_chitiet, tinh_thanhpho, loaidiachi) 
-                                      VALUES ($idnguoidung, '$hoten_nguoinhan', '$sdt_nguoinhan', '$diachi_chitiet', '$tinh_thanhpho', 'mặc định')";
+                // B. Insert địa chỉ đầu tiên (nếu có thông tin)
+                if (!empty($diachi)) {
+                    $sql_insert_dc = "INSERT INTO diachi (idnguoidung, hoten, sdt, diachi) 
+                                      VALUES ($idnguoidung, '$hoten_dc', '$sdt_dc', '$diachi')";
                     if (!mysqli_query($ketnoi, $sql_insert_dc)) {
                         throw new Exception("Lỗi khi thêm địa chỉ.");
                     }
@@ -105,17 +104,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="hoten_nguoinhan" class="form-label">Tên người nhận</label>
-                            <input type="text" class="form-control" id="hoten_nguoinhan" name="hoten_nguoinhan" placeholder="Mặc định là Họ Tên ở trên">
+                            <label for="hoten_dc" class="form-label">Họ Tên người nhận</label>
+                            <input type="text" class="form-control" id="hoten_dc" name="hoten_dc" placeholder="Mặc định là Họ Tên ở trên">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="tinh_thanhpho" class="form-label">Tỉnh/Thành phố</label>
-                            <input type="text" class="form-control" id="tinh_thanhpho" name="tinh_thanhpho">
+                            <label for="sdt_dc" class="form-label">Số điện thoại người nhận</label>
+                            <input type="text" class="form-control" id="sdt_dc" name="sdt_dc" placeholder="Mặc định là SĐT ở trên">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="diachi_chitiet" class="form-label">Địa chỉ chi tiết</label>
-                        <textarea class="form-control" id="diachi_chitiet" name="diachi_chitiet" rows="2" placeholder="Số nhà, tên đường, phường/xã"></textarea>
+                        <label for="diachi" class="form-label">Địa chỉ</label>
+                        <textarea class="form-control" id="diachi" name="diachi" rows="2" placeholder="Số nhà, tên đường, phường/xã, tỉnh/thành phố"></textarea>
                     </div>
                 </div>
             </div>

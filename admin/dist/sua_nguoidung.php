@@ -32,8 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vaitro = mysqli_real_escape_string($ketnoi, $_POST['vaitro'] ?? $nguoidung_hien_tai['vaitro']);
     
     // Địa chỉ (nếu có)
-    $diachi_chitiet = mysqli_real_escape_string($ketnoi, $_POST['diachi_chitiet'] ?? '');
-    $tinh_thanhpho = mysqli_real_escape_string($ketnoi, $_POST['tinh_thanhpho'] ?? '');
+    $diachi = mysqli_real_escape_string($ketnoi, $_POST['diachi'] ?? '');
+    $hoten_dc = mysqli_real_escape_string($ketnoi, $_POST['hoten_dc'] ?? '');
+    $sdt_dc = mysqli_real_escape_string($ketnoi, $_POST['sdt_dc'] ?? '');
     
     mysqli_begin_transaction($ketnoi); 
     try {
@@ -60,16 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Cập nhật địa chỉ đã có
             $iddiachi = $diachi_hien_tai['iddiachi'];
             $sql_update_dc = "UPDATE diachi SET 
-                            diachi_chitiet = '$diachi_chitiet',
-                            tinh_thanhpho = '$tinh_thanhpho'
+                            hoten = '$hoten_dc',
+                            sdt = '$sdt_dc',
+                            diachi = '$diachi'
                             WHERE iddiachi = $iddiachi";
             if (!mysqli_query($ketnoi, $sql_update_dc)) {
                 throw new Exception("Lỗi khi cập nhật địa chỉ.");
             }
-        } elseif (!empty($diachi_chitiet) && !empty($tinh_thanhpho)) {
+        } elseif (!empty($diachi)) {
             // Trường hợp người dùng chưa có địa chỉ, thêm mới
-            $sql_insert_dc = "INSERT INTO diachi (idnguoidung, hoten_nguoinhan, sdt_nguoinhan, diachi_chitiet, tinh_thanhpho, loaidiachi) 
-                                VALUES ($idnguoidung, '$hoten', '$sdt', '$diachi_chitiet', '$tinh_thanhpho', 'mặc định')";
+            $sql_insert_dc = "INSERT INTO diachi (idnguoidung, hoten, sdt, diachi) 
+                                VALUES ($idnguoidung, '$hoten_dc', '$sdt_dc', '$diachi')";
             if (!mysqli_query($ketnoi, $sql_insert_dc)) {
                 throw new Exception("Lỗi khi thêm địa chỉ mới.");
             }
@@ -133,14 +135,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <p class="text-muted fst-italic">Đây là địa chỉ đầu tiên được tìm thấy, bạn có thể chỉnh sửa nó.</p>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="tinh_thanhpho" class="form-label">Tỉnh/Thành phố</label>
-                            <input type="text" class="form-control" id="tinh_thanhpho" name="tinh_thanhpho"
-                                   value="<?= htmlspecialchars($diachi_hien_tai['tinh_thanhpho'] ?? ''); ?>">
+                            <label for="hoten_dc" class="form-label">Họ Tên người nhận</label>
+                            <input type="text" class="form-control" id="hoten_dc" name="hoten_dc"
+                                   value="<?= htmlspecialchars($diachi_hien_tai['hoten'] ?? ''); ?>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sdt_dc" class="form-label">Số điện thoại người nhận</label>
+                            <input type="text" class="form-control" id="sdt_dc" name="sdt_dc"
+                                   value="<?= htmlspecialchars($diachi_hien_tai['sdt'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="diachi_chitiet" class="form-label">Địa chỉ chi tiết</label>
-                        <textarea class="form-control" id="diachi_chitiet" name="diachi_chitiet" rows="2" placeholder="Số nhà, tên đường, phường/xã"><?= htmlspecialchars($diachi_hien_tai['diachi_chitiet'] ?? ''); ?></textarea>
+                        <label for="diachi" class="form-label">Địa chỉ</label>
+                        <textarea class="form-control" id="diachi" name="diachi" rows="2" placeholder="Số nhà, tên đường, phường/xã, tỉnh/thành phố"><?= htmlspecialchars($diachi_hien_tai['diachi'] ?? ''); ?></textarea>
                     </div>
                 </div>
             </div>

@@ -5,15 +5,15 @@ require_once('ketnoi.php');
 $sql = "
     SELECT 
         nd.idnguoidung, 
-        nd.hoten,       /* ĐÃ SỬA: tennguoidung -> hoten */
+        nd.hoten,
         nd.email, 
-        nd.sdt,         /* ĐÃ SỬA: sodienthoai -> sdt */
-        nd.vaitro,      /* ĐÃ SỬA: quyen -> vaitro */
-        d.diachi_chitiet
+        nd.sdt,
+        nd.vaitro,
+        COALESCE(d.diachi, 'Chưa có địa chỉ') as diachi
     FROM nguoidung nd
-    LEFT JOIN diachi d ON nd.idnguoidung = d.idnguoidung 
-    -- Dùng GROUP BY để chỉ lấy 1 dòng địa chỉ (dòng đầu tiên được tìm thấy) cho mỗi người dùng
-    GROUP BY nd.idnguoidung
+    LEFT JOIN diachi d ON nd.idnguoidung = d.idnguoidung AND d.iddiachi = (
+        SELECT MIN(iddiachi) FROM diachi WHERE idnguoidung = nd.idnguoidung
+    )
     ORDER BY nd.idnguoidung DESC
 ";
 
@@ -60,7 +60,7 @@ if (!$query) {
                                 <td class="text-start fw-semibold"><?= htmlspecialchars($row['hoten']); ?></td>
                                 <td><?= htmlspecialchars($row['email']); ?></td>
                                 <td><?= htmlspecialchars($row['sdt'] ?? 'N/A'); ?></td>
-                                <td class="text-start"><?= htmlspecialchars($row['diachi_chitiet'] ?? 'Chưa có địa chỉ'); ?></td>
+                                <td class="text-start"><?= htmlspecialchars($row['diachi'] ?? 'Chưa có địa chỉ'); ?></td>
                                 <td><span class="<?= $vaitro_class; ?>"><?= htmlspecialchars(ucfirst($row['vaitro'])); ?></span></td>
                                 <td>
                                     <div class="d-flex justify-content-center gap-2">
