@@ -19,12 +19,27 @@
     color: #000;
 }
 
+.badge-status-cho_duyet {
+    background-color: #ffc107;
+    color: #000;
+}
+
 .badge-status-dang_xu_ly {
     background-color: #17a2b8;
     color: #fff;
 }
 
+.badge-status-dang_giao {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
 .badge-status-da_giao {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-status-hoan_thanh {
     background-color: #28a745;
     color: #fff;
 }
