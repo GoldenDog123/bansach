@@ -216,6 +216,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="modal-footer border-warning">
+          <button type="button" class="btn btn-success" id="paymentBtn" onclick="processPayment()">
+            <i class="fa fa-credit-card"></i> Thanh toán
+          </button>
           <button type="button" class="btn btn-warning" onclick="printInvoice()">
             <i class="fa fa-print"></i> In hóa đơn
           </button>
@@ -347,6 +350,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           const html = generateInvoiceHTML(invoice);
           
           document.getElementById('invoiceContent').innerHTML = html;
+          
+          // Lưu order ID vào nút thanh toán
+          const paymentBtn = document.getElementById('paymentBtn');
+          paymentBtn.dataset.orderId = iddonhang;
           
           // Hiển thị modal
           const modal = new bootstrap.Modal(document.getElementById('invoiceModal'));
@@ -501,6 +508,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
       printWindow.document.write(printHTML);
       printWindow.document.close();
+    }
+
+    // ===== XỬ LÝ THANH TOÁN =====
+    async function processPayment() {
+      const paymentBtn = document.getElementById('paymentBtn');
+      const iddonhang = paymentBtn.dataset.orderId;
+      
+      if (!iddonhang) {
+        alert('Lỗi: Không tìm thấy mã đơn hàng');
+        return;
+      }
+
+      console.log('Processing payment for order:', iddonhang);
+
+      // Vô hiệu hóa nút khi đang xử lý
+      paymentBtn.disabled = true;
+      paymentBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
+
+      try {
+        const formData = new URLSearchParams();
+        formData.append('iddonhang', iddonhang);
+        formData.append('trangthai', 'cho_duyet');
+        formData.append('ghichu', 'Thanh toán thành công');
+
+        console.log('Sending request with data:', formData.toString());
+
+        const response = await fetch('xuly_capnhat_trangthai_v3.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+
+        console.log('Response status:', response.status);
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
+
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError);
+          alert('❌ Lỗi: Phản hồi từ server không hợp lệ\n' + responseText);
+          paymentBtn.disabled = false;
+          paymentBtn.innerHTML = '<i class="fa fa-credit-card"></i> Thanh toán';
+          return;
+        }
+        
+        if (result.success) {
+          alert('✅ Thanh toán thành công!\nĐơn hàng của bạn đã được cập nhật.');
+          paymentBtn.classList.remove('btn-success');
+          paymentBtn.classList.add('btn-secondary');
+          paymentBtn.innerHTML = '<i class="fa fa-check"></i> Đã thanh toán';
+          paymentBtn.disabled = true;
+        } else {
+          alert('❌ Lỗi: ' + result.message);
+          paymentBtn.disabled = false;
+          paymentBtn.innerHTML = '<i class="fa fa-credit-card"></i> Thanh toán';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Lỗi xử lý thanh toán: ' + error.message);
+        paymentBtn.disabled = false;
+        paymentBtn.innerHTML = '<i class="fa fa-credit-card"></i> Thanh toán';
+      }
     }
   </script></body>
 

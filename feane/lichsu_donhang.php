@@ -98,7 +98,7 @@ $orders = mysqli_fetch_all($orders_q, MYSQLI_ASSOC);
                         <!-- timeline lịch sử trạng thái cho đơn này -->
                         <?php
                         $idd = intval($order['iddonhang']);
-                        $stmt = mysqli_prepare($ketnoi, "SELECT trangthai_cu, trangthai_moi, ghichu, ngaycapnhat FROM lichsu_donhang WHERE iddonhang = ? ORDER BY ngaycapnhat ASC");
+                        $stmt = mysqli_prepare($ketnoi, "SELECT trangthai, ghichu, ngaycapnhat FROM lichsu_donhang WHERE iddonhang = ? ORDER BY ngaycapnhat ASC");
                         mysqli_stmt_bind_param($stmt, 'i', $idd);
                         mysqli_stmt_execute($stmt);
                         $res = mysqli_stmt_get_result($stmt);
@@ -107,20 +107,17 @@ $orders = mysqli_fetch_all($orders_q, MYSQLI_ASSOC);
                         ?>
                         <?php if (empty($hist)): ?>
                             <p class="text-muted">Chưa có lịch sử thay đổi trạng thái cho đơn này.</p>
-                            <div class="small text-muted">Mặc định trạng thái hiện tại: <strong><?php echo $order['trangthai']; ?></strong></div>
+                            <div class="small text-muted">Trạng thái hiện tại: <strong><?php echo str_replace('_', ' ', $order['trangthai']); ?></strong></div>
                         <?php else: ?>
                             <ul class="timeline">
                                 <?php foreach ($hist as $h): ?>
                                     <li class="timeline-item">
                                         <div class="small time"><?php echo $h['ngaycapnhat']; ?></div>
                                         <div class="mt-1">
-                                            <span class="badge <?php echo 'badge-status-' . $h['trangthai_moi']; ?>">
-                                                <?php echo str_replace('_', ' ', $h['trangthai_moi']); ?>
+                                            <span class="badge <?php echo 'badge-status-' . $h['trangthai']; ?>">
+                                                <?php echo str_replace('_', ' ', $h['trangthai']); ?>
                                             </span>
                                             <div class="mt-2"><?php echo htmlspecialchars($h['ghichu']); ?></div>
-                                            <?php if ($h['trangthai_cu'] !== null): ?>
-                                                <div class="text-muted mt-1 small">Từ: <?php echo str_replace('_', ' ', $h['trangthai_cu']); ?></div>
-                                            <?php endif; ?>
                                         </div>
                                     </li>
                                 <?php endforeach; ?>
