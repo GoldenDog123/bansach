@@ -80,7 +80,7 @@ if (!$query) {
                         ?>
                             <tr>
                                 <td><strong class="text-primary">DH<?= $row['iddonhang'] ?></strong></td>
-                                <td><?= date('d/m/Y H:i', strtotime($row['ngaydat'])); ?></td>
+                                <td><?= $row['ngaydat'] ? date('d/m/Y H:i', strtotime($row['ngaydat'])) : 'N/A'; ?></td>
                                 <td class="text-start">
                                     <strong><?= htmlspecialchars($row['hoten']); ?></strong><br>
                                     <small class="text-muted"><?= htmlspecialchars($row['email']); ?></small>

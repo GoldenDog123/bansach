@@ -24,17 +24,29 @@ $total_categories = $data_tong_loai['total_categories'] ?? 0;
 
 // --- 2. THỐNG KÊ DOANH THU & ĐƠN HÀNG (Dựa trên bảng donhang) ---
 
-// D. Tổng số đơn hàng thành công (Giả sử trang thai = 'Hoàn thành' là đơn hàng thành công)
-$sql_tong_don = "SELECT COUNT(iddonhang) AS total_orders FROM donhang WHERE trangthai = 'Hoàn thành'";
+// D. Tổng số đơn hàng thành công (Giả sử trang thai = 'hoan_thanh' là đơn hàng thành công)
+$sql_tong_don = "SELECT COUNT(iddonhang) AS total_orders FROM donhang WHERE trangthai = 'hoan_thanh'";
 $res_tong_don = mysqli_query($ketnoi, $sql_tong_don);
 $data_tong_don = mysqli_fetch_assoc($res_tong_don);
 $total_orders = $data_tong_don['total_orders'] ?? 0;
 
-// E. Tổng doanh thu (Tổng cột tongtien trong bảng donhang)
-$sql_doanh_thu = "SELECT SUM(tongtien) AS total_revenue FROM donhang WHERE trangthai = 'Hoàn thành'";
+// Tổng tất cả đơn hàng (bao gồm cả chưa hoàn thành)
+$sql_all_orders = "SELECT COUNT(iddonhang) AS all_orders FROM donhang";
+$res_all_orders = mysqli_query($ketnoi, $sql_all_orders);
+$data_all_orders = mysqli_fetch_assoc($res_all_orders);
+$all_orders = $data_all_orders['all_orders'] ?? 0;
+
+// E. Tổng doanh thu (Tổng cột tongtien trong bảng donhang - chỉ đơn hoàn thành)
+$sql_doanh_thu = "SELECT SUM(tongtien) AS total_revenue FROM donhang WHERE trangthai = 'hoan_thanh'";
 $res_doanh_thu = mysqli_query($ketnoi, $sql_doanh_thu);
 $data_doanh_thu = mysqli_fetch_assoc($res_doanh_thu);
 $total_revenue = $data_doanh_thu['total_revenue'] ?? 0;
+
+// Tổng doanh thu tất cả đơn (bao gồm cả chưa hoàn thành)
+$sql_all_revenue = "SELECT SUM(tongtien) AS all_revenue FROM donhang WHERE tongtien IS NOT NULL";
+$res_all_revenue = mysqli_query($ketnoi, $sql_all_revenue);
+$data_all_revenue = mysqli_fetch_assoc($res_all_revenue);
+$all_revenue = $data_all_revenue['all_revenue'] ?? 0;
 
 // F. Sách bán chạy nhất (Top 5 - Dựa trên donhang_chitiet)
 $sql_top_sach = "
@@ -64,10 +76,13 @@ $res_top_sach = mysqli_query($ketnoi, $sql_top_sach);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Tổng Doanh Thu (Hoàn thành)
+                                Tổng Doanh Thu
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= number_format($total_revenue, 0, ',', '.') ?>₫
+                                <?= number_format($all_revenue, 0, ',', '.') ?>₫
+                            </div>
+                            <div class="text-xs text-muted mt-1">
+                                Hoàn thành: <?= number_format($total_revenue, 0, ',', '.') ?>₫
                             </div>
                         </div>
                         <div class="col-auto">
@@ -84,10 +99,13 @@ $res_top_sach = mysqli_query($ketnoi, $sql_top_sach);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Tổng Đơn Hàng (Hoàn thành)
+                                Tổng Đơn Hàng
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= number_format($total_orders) ?>
+                                <?= number_format($all_orders) ?>
+                            </div>
+                            <div class="text-xs text-muted mt-1">
+                                Hoàn thành: <?= number_format($total_orders) ?>
                             </div>
                         </div>
                         <div class="col-auto">

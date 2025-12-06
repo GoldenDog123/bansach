@@ -1,18 +1,28 @@
 <?php
 require_once('ketnoi.php');
 
-if (isset($_GET['iddanhgia'])) {
-    $iddanhgia = mysqli_real_escape_string($ketnoi, $_GET['iddanhgia']);
-
-    $sql = "DELETE FROM danhgia WHERE iddanhgia = $iddanhgia";
+// Xóa bình luận (từ bảng binh_luan)
+if (isset($_GET['id_binh_luan'])) {
+    $id_binh_luan = intval($_GET['id_binh_luan']);
+    $sql = "DELETE FROM binh_luan WHERE id_binh_luan = $id_binh_luan";
     
     if (mysqli_query($ketnoi, $sql)) {
-        echo "Xóa đánh giá thành công"; // Phản hồi cho Fetch API
+        echo "Xóa đánh giá thành công";
     } else {
-        http_response_code(500);
-        echo "Lỗi xóa đánh giá: " . mysqli_error($ketnoi);
+        echo "Lỗi: " . mysqli_error($ketnoi);
+    }
+}
+// Xóa đánh giá (từ bảng danh_gia)
+elseif (isset($_GET['id_danh_gia'])) {
+    $id_danh_gia = intval($_GET['id_danh_gia']);
+    $sql = "DELETE FROM danh_gia WHERE id_danh_gia = $id_danh_gia";
+    
+    if (mysqli_query($ketnoi, $sql)) {
+        echo "Xóa đánh giá thành công";
+    } else {
+        echo "Lỗi: " . mysqli_error($ketnoi);
     }
 } else {
-    echo "Thiếu ID đánh giá";
+    echo "Thiếu thông tin đánh giá";
 }
 ?>

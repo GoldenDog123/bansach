@@ -6,6 +6,13 @@ session_start();
 $logged_name = $_SESSION['hoten'] ?? '';
 $logged_email = $_SESSION['email'] ?? '';
 
+// ===== XỬ LÝ XÓA COUPON =====
+if (isset($_GET['remove_coupon'])) {
+  unset($_SESSION['applied_coupon']);
+  header('Location: book.php?' . http_build_query(['ids' => $_GET['ids'] ?? '']));
+  exit;
+}
+
 // ===== THÔNG TIN SÁCH =====
 $selected_books = [];
 if (isset($_GET['idsach'])) {
@@ -37,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $email = trim($_POST['email']);
   $book_ids = $_POST['book_ids'] ?? [];
   $quantities = $_POST['soluong'] ?? [];
-  $ngaydat = date('Y-m-d');
+  $ngaydat = date('Y-m-d H:i:s');
 
   if (empty($hoten) || empty($email) || empty($book_ids)) {
     $message_form = '<div class="alert alert-danger">⚠️ Vui lòng nhập đầy đủ thông tin và chọn ít nhất 1 sách.</div>';
@@ -60,17 +67,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $message_form = '<div class="alert alert-danger">❌ Không tìm thấy tài khoản người dùng.</div>';
     } else {
 
-      // 🔥 1) Tạo đơn hàng
+      // 🔥 1) Tính tổng tiền trước
+      $tongtien = 0;
+      foreach ($book_ids as $idsach) {
+        $sl = max(1, intval($quantities[$idsach] ?? 1));
+        
+        // Lấy giá sách
+        $stmt_price = mysqli_prepare($ketnoi, "SELECT dongia FROM sach WHERE idsach = ?");
+        mysqli_stmt_bind_param($stmt_price, 'i', $idsach);
+        mysqli_stmt_execute($stmt_price);
+        mysqli_stmt_bind_result($stmt_price, $dongia);
+        
+        if (mysqli_stmt_fetch($stmt_price)) {
+          $tongtien += $dongia * $sl;
+        }
+        mysqli_stmt_close($stmt_price);
+      }
+      
+      // Thêm VAT 10%
+      $tongtien = $tongtien * 1.1;
+
+      // 🔥 1.5) Áp dụng coupon nếu có
+      $giam_gia = 0;
+      $ma_coupon = NULL;
+      $tongtien_goc = $tongtien;
+      
+      if (isset($_SESSION['applied_coupon'])) {
+        $coupon = $_SESSION['applied_coupon'];
+        $ma_coupon = $coupon['macoupon'];
+        
+        // Tính giá trị giảm
+        if ($coupon['loaigiam'] == 'percent') {
+          $giam_gia = $tongtien * ($coupon['giatri'] / 100);
+        } else {
+          $giam_gia = $coupon['giatri'];
+        }
+        
+        // Đảm bảo không giảm quá tổng tiền
+        if ($giam_gia > $tongtien) {
+          $giam_gia = $tongtien;
+        }
+        
+        // Trừ giảm giá
+        $tongtien = $tongtien - $giam_gia;
+        
+        // Giảm số lượng coupon
+        $idcoupon = $coupon['idcoupon'];
+        mysqli_query($ketnoi, "UPDATE coupon SET soluong = soluong - 1 WHERE idcoupon = $idcoupon AND soluong > 0");
+        
+        // Xóa coupon khỏi session
+        unset($_SESSION['applied_coupon']);
+      }
+
+      // 🔥 2) Tạo đơn hàng với tổng tiền (đã trừ giảm giá)
       $stmt_don = mysqli_prepare($ketnoi, "
-        INSERT INTO donhang (idnguoidung, ngaydat, trangthai)
-        VALUES (?, ?, 'cho_xu_ly')
+        INSERT INTO donhang (idnguoidung, ngaydat, tongtien, ma_coupon, giam_gia, trangthai)
+        VALUES (?, ?, ?, ?, ?, 'cho_xu_ly')
       ");
-      mysqli_stmt_bind_param($stmt_don, 'is', $idnguoidung, $ngaydat);
+      mysqli_stmt_bind_param($stmt_don, 'isdsi', $idnguoidung, $ngaydat, $tongtien, $ma_coupon, $giam_gia);
       mysqli_stmt_execute($stmt_don);
       $iddonhang = mysqli_insert_id($ketnoi);
       mysqli_stmt_close($stmt_don);
 
-      // 🔥 2) Thêm chi tiết đơn hàng
+      // 🔥 3) Thêm chi tiết đơn hàng
       $inserted = 0;
 
       foreach ($book_ids as $idsach) {
@@ -184,6 +243,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </ul>
           </div>
 
+          <!-- Phần Coupon -->
+          <div class="form-group mb-3">
+            <label>🎁 Mã giảm giá</label>
+            <?php if (isset($_SESSION['applied_coupon'])): 
+              $coupon = $_SESSION['applied_coupon'];
+              $giatri_display = $coupon['loaigiam'] == 'percent' 
+                ? $coupon['giatri'] . '%' 
+                : number_format($coupon['giatri'], 0, ',', '.') . '₫';
+            ?>
+              <div class="alert alert-success d-flex justify-content-between align-items-center">
+                <div>
+                  <i class="fa fa-check-circle me-2"></i>
+                  <strong>Mã:</strong> 
+                  <span class="badge bg-primary px-3 py-2 ms-2"><?= $coupon['macoupon'] ?></span>
+                  <span class="ms-2">- Giảm <?= $giatri_display ?></span>
+                </div>
+                <a href="?remove_coupon=1" class="btn btn-sm btn-danger">
+                  <i class="fa fa-times"></i> Xóa
+                </a>
+              </div>
+            <?php else: ?>
+              <div class="input-group">
+                <input type="text" id="coupon-input" class="form-control bg-dark text-white border-secondary" 
+                       placeholder="Nhập mã giảm giá" style="text-transform: uppercase;">
+                <button type="button" class="btn btn-warning" onclick="applyCoupon()">
+                  <i class="fa fa-check"></i> Áp dụng
+                </button>
+              </div>
+              <small class="text-muted">
+                <a href="coupon.php" class="text-warning" target="_blank">
+                  <i class="fa fa-gift"></i> Xem danh sách mã giảm giá
+                </a>
+              </small>
+            <?php endif; ?>
+          </div>
+
           <!-- Nút xác nhận -->
           <div class="text-center mt-4">
             <button type="submit" class="btn btn-warning px-5 py-2 fw-bold rounded-pill">
@@ -237,6 +332,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
   <script>
+    // ===== ÁP DỤNG COUPON =====
+    async function applyCoupon() {
+      const input = document.getElementById('coupon-input');
+      const macoupon = input.value.trim().toUpperCase();
+      
+      if (!macoupon) {
+        alert('⚠️ Vui lòng nhập mã giảm giá!');
+        return;
+      }
+      
+      try {
+        const response = await fetch('xuly_coupon.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `action=apply&macoupon=${macoupon}&tongtien=0`
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('✅ ' + result.message);
+          window.location.reload();
+        } else {
+          alert('❌ ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Lỗi khi áp dụng mã giảm giá');
+      }
+    }
+
     // Load cart from localStorage on page load
     document.addEventListener('DOMContentLoaded', () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
