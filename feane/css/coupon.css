@@ -1,0 +1,151 @@
+/* Coupon Page Styles */
+
+.coupon-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 60px 0;
+}
+
+.coupon-card {
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coupon-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.coupon-header {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 20px;
+    text-align: center;
+}
+
+.coupon-code {
+    font-size: 20px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    padding: 10px 20px;
+    background: #000;
+    color: #fff;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 15px 0;
+}
+
+.coupon-value {
+    font-size: 48px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+}
+
+.coupon-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.copy-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.apply-coupon-form {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.coupon-input {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.coupon-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.applied-coupon {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.coupon-badge {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h4 {
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.info-card ol {
+    padding-left: 20px;
+}
+
+.info-card li {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.coupon-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .coupon-value {
+        font-size: 36px;
+    }
+    
+    .coupon-code {
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+    
+    .apply-coupon-form {
+        padding: 20px;
+    }
+}

@@ -17,6 +17,7 @@ if (!isset($_POST['idsach']) || !isset($_POST['diem'])) {
 
 $idsach = intval($_POST['idsach']);
 $diem = intval($_POST['diem']);
+$noidung = isset($_POST['noidung']) ? mysqli_real_escape_string($ketnoi, trim($_POST['noidung'])) : '';
 
 // Kiểm tra diem hợp lệ
 if ($diem < 1 || $diem > 5) {
@@ -33,11 +34,12 @@ $result_check = mysqli_query($ketnoi, $sql_check);
 
 if (mysqli_num_rows($result_check) > 0) {
   // Update
-  $sql = "UPDATE danh_gia SET diem_danh_gia = $diem WHERE idsach = $idsach AND id_khach_hang = $id_khach_hang";
+  $sql = "UPDATE danh_gia SET diem_danh_gia = $diem, noi_dung = '$noidung', ngay_tao = NOW() WHERE idsach = $idsach AND id_khach_hang = $id_khach_hang";
   $message = "Cập nhật đánh giá thành công";
 } else {
   // Insert
-  $sql = "INSERT INTO danh_gia (idsach, id_khach_hang, diem_danh_gia) VALUES ($idsach, $id_khach_hang, $diem)";
+  $sql = "INSERT INTO danh_gia (idsach, id_khach_hang, diem_danh_gia, noi_dung, ngay_tao, trang_thai) 
+          VALUES ($idsach, $id_khach_hang, $diem, '$noidung', NOW(), 'Chờ duyệt')";
   $message = "Cảm ơn bạn đã đánh giá!";
 }
 
