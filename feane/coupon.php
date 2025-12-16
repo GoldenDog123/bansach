@@ -1,20 +1,16 @@
 <?php
 require_once('ketnoi.php');
 session_start();
-
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['idnguoidung'])) {
     header('Location: dangnhap.php');
     exit;
 }
-
 $idnguoidung = $_SESSION['idnguoidung'];
 $message = '';
-
 // Xử lý áp dụng coupon
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply_coupon'])) {
     $macoupon = strtoupper(trim($_POST['macoupon']));
-    
     if (empty($macoupon)) {
         $message = '<div class="alert alert-warning">⚠️ Vui lòng nhập mã coupon!</div>';
     } else {
@@ -27,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply_coupon'])) {
                       AND (ngayketthuc IS NULL OR ngayketthuc >= '$now')";
         
         $result = mysqli_query($ketnoi, $sql_check);
-        
         if (mysqli_num_rows($result) > 0) {
             $coupon = mysqli_fetch_assoc($result);
             $_SESSION['applied_coupon'] = $coupon;
@@ -37,13 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply_coupon'])) {
         }
     }
 }
-
 // Xử lý xóa coupon đã áp dụng
 if (isset($_GET['remove_coupon'])) {
     unset($_SESSION['applied_coupon']);
     $message = '<div class="alert alert-info">ℹ️ Đã xóa mã giảm giá!</div>';
 }
-
 // Lấy danh sách coupon đang hoạt động
 $now = date('Y-m-d H:i:s');
 $sql_coupons = "SELECT * FROM coupon 
